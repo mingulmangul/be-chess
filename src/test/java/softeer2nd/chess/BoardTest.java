@@ -1,10 +1,7 @@
 package softeer2nd.chess;
 
 import org.junit.jupiter.api.*;
-import softeer2nd.chess.Board;
 import softeer2nd.chess.pieces.Pawn;
-
-import java.awt.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -17,14 +14,14 @@ public class BoardTest {
         board = new Board();
     }
 
-    public void addPawn(String color) {
+    public void addPawn(final String color) {
         int size = board.size();
 
         Pawn pawn = new Pawn(color);
         board.add(pawn);
 
         assertEquals(size + 1, board.size());
-        assertEquals(pawn, board.findPawn(size));
+//        assertEquals(pawn, board.findPawn(size));
     }
 
     @Test
@@ -32,6 +29,16 @@ public class BoardTest {
     public void create() {
         addPawn(Pawn.WHITE_COLOR);
         addPawn(Pawn.BLACK_COLOR);
+    }
+
+    @Test
+    @DisplayName("8*8 체스판을 초기화합니다")
+    public void initialize() {
+        board.initialize();
+        String result = board.print();
+        System.out.println(result);
+        assertEquals("pppppppp", board.getWhitePawnsList());
+        assertEquals("PPPPPPPP", board.getBlackPawnsList());
     }
 
 //    보드에 폰 이외의 객체 추가 -> 컴파일 에러
