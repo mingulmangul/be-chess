@@ -12,7 +12,7 @@ public class Chess {
             if (input.equals("start")) {
                 Board board = new Board();
                 board.initialize();
-                System.out.println(board.print());
+                System.out.println(board.showBoard());
             } else if (input.equals("end")) {
                 break;
             }
