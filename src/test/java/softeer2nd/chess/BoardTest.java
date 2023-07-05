@@ -1,34 +1,60 @@
 package softeer2nd.chess;
 
 import org.junit.jupiter.api.*;
-import softeer2nd.chess.pieces.Pawn;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static softeer2nd.utils.StringUtils.*;
 
 public class BoardTest {
 
-    Board board;
+    private Board board;
 
     @BeforeEach
-    public void before() {
+    public void setup() {
         board = new Board();
     }
 
+    @Test
+    @DisplayName("보드 초기화")
+    public void create() throws Exception {
+        board.initialize();
+        assertEquals(32, board.pieceCount());
+        String blankRank = appendNewLine("........");
+        assertEquals(
+                appendNewLine("RNBQKBNR") +
+                        appendNewLine("PPPPPPPP") +
+                        blankRank + blankRank + blankRank + blankRank +
+                        appendNewLine("pppppppp") +
+                        appendNewLine("rnbqkbnr"),
+                board.showBoard()
+        );
+    }
+
+    /*
     public void addPawn(final String color) {
         int size = board.size();
 
-        Pawn pawn = new Pawn(color);
+        Piece pawn = new Piece(color);
         board.add(pawn);
 
         assertEquals(size + 1, board.size());
-//        assertEquals(pawn, board.findPawn(size));
+        assertEquals(pawn, board.findPawn(size));
     }
 
     @Test
     @DisplayName("보드에 폰을 추가합니다")
     public void create() {
-        addPawn(Pawn.WHITE_COLOR);
-        addPawn(Pawn.BLACK_COLOR);
+        addPawn(Piece.WHITE_COLOR);
+        addPawn(Piece.BLACK_COLOR);
+    }
+
+    보드에 폰 이외의 객체 추가 -> 컴파일 에러
+    @Test
+    public void addPawnOnly() {
+        Board board = new Board();
+
+        Integer intVar = new Integer("7");
+        board.add(intVar);
     }
 
     @Test
@@ -41,12 +67,5 @@ public class BoardTest {
         assertEquals("PPPPPPPP", board.getBlackPawnsList());
     }
 
-//    보드에 폰 이외의 객체 추가 -> 컴파일 에러
-//    @Test
-//    public void addPawnOnly() {
-//        Board board = new Board();
-//
-//        Integer intVar = new Integer("7");
-//        board.add(intVar);
-//    }
+     */
 }
