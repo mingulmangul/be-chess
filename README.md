@@ -36,3 +36,19 @@
 - 게임 시작 및 종료 기능 추가
     - 체스 게임을 시작하는 Chess 클래스 추가
     - Scanner를 이용해 사용자에게 게임 시작/종료 명령어 입력 받기
+
+## step 4 기물 배치
+
+> Value Object의 활용
+> <br>팩토리 메소드의 활용
+
+**체스판의 모든 기물 초기화하기**
+
+- `StringUtils` 클래스 추가
+    - `\n` 문자 제거하기 ➡ `System.getProperty("line.separator")`
+    - 유틸리티 메소드 구현 (`appendNewLine()`)
+- Pawn ➡ Piece 변경 (일반화)
+    - 색상과 이름으로 기물을 구분
+    - 색상 구분 메소드 추가
+    - value object로 구현 ➡ 팩토리 메소드를 통해서만 생성 가능 & 불변 객체
+- 전체 체스판 출력 기능 추가 및 테스트
