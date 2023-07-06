@@ -1,77 +1,132 @@
 package softeer2nd.chess.pieces;
 
+/**
+ * Value Object로 구현
+ */
 public class Piece {
 
-    public static final String WHITE_COLOR = "white";
-    public static final String BLACK_COLOR = "black";
-    public static final String NONE_COLOR = "none";
+    private final Color color;  // 색상
+    private final Type type;   // 이름 (기물의 종류)
 
-    private final String color;         // 색상
-    private final PieceType type;   // 이름 (기물의 종류)
-
-//    기본 말을 생성하는 생성자 제거
-//    public Piece() {
-//        this.color = WHITE_COLOR;
-//        this.representation = WHITE_REPRESENTATION;
-//    }
-
-    private Piece(String color, PieceType type) {
+    // 팩토리 메소드를 통해서만 생성 -> private 생성자
+    private Piece(Color color, Type type) {
         this.color = color;
         this.type = type;
     }
 
-    public static Piece createEmptyPiece() {
-        return new Piece(NONE_COLOR, PieceType.NONE);
+    // 흰색 기물 생성
+    private static Piece createWhite(Type type) {
+        return new Piece(Color.WHITE, type);
     }
 
-    public static Piece createPawn(String color) {
-        return new Piece(color, PieceType.PAWN);
+    // 검은색 기물 생성
+    private static Piece createBlack(Type type) {
+        return new Piece(Color.BLACK, type);
     }
 
-    public static Piece createRook(String color) {
-        return new Piece(color, PieceType.ROOK);
+    // 비어있는 기물 생성
+    public static Piece createBlank() {
+        return new Piece(Color.NOCOLOR, Type.NONE);
     }
 
-    public static Piece createKnight(String color) {
-        return new Piece(color, PieceType.KNIGHT);
+    public static Piece createWhitePawn() {
+        return createWhite(Type.PAWN);
     }
 
-    public static Piece createBishop(String color) {
-        return new Piece(color, PieceType.BISHOP);
+    public static Piece createBlackPawn() {
+        return createBlack(Type.PAWN);
     }
 
-    public static Piece createQueen(String color) {
-        return new Piece(color, PieceType.QUEEN);
+    public static Piece createWhiteKnight() {
+        return createWhite(Type.KNIGHT);
     }
 
-    public static Piece createKing(String color) {
-        return new Piece(color, PieceType.KING);
+    public static Piece createBlackKnight() {
+        return createBlack(Type.KNIGHT);
     }
 
-    public String getColor() {
+    public static Piece createWhiteRook() {
+        return createWhite(Type.ROOK);
+    }
+
+    public static Piece createBlackRook() {
+        return createBlack(Type.ROOK);
+    }
+
+    public static Piece createWhiteBishop() {
+        return createWhite(Type.BISHOP);
+    }
+
+    public static Piece createBlackBishop() {
+        return createBlack(Type.BISHOP);
+    }
+
+    public static Piece createWhiteQueen() {
+        return createWhite(Type.QUEEN);
+    }
+
+    public static Piece createBlackQueen() {
+        return createBlack(Type.QUEEN);
+    }
+
+    public static Piece createWhiteKing() {
+        return createWhite(Type.KING);
+    }
+
+    public static Piece createBlackKing() {
+        return createBlack(Type.KING);
+    }
+
+    public Color getColor() {
         return this.color;
     }
 
-    public PieceType getType() {
+    public Type getType() {
         return type;
+    }
+
+    public boolean isBlack() {
+        return color.equals(Color.BLACK);
+    }
+
+    public boolean isWhite() {
+        return color.equals(Color.WHITE);
     }
 
     @Override
     public String toString() {
-        char representation;
         if (isWhite()) {
-            representation = Character.toLowerCase(type.getRepresentation());
-        } else {
-            representation = type.getRepresentation();
+            return String.valueOf(type.getWhiteRepresentation());
         }
-        return String.valueOf(representation);
+        return String.valueOf(type.getBlackRepresentation());
     }
 
-    public boolean isBlack() {
-        return color.equals(BLACK_COLOR);
+    public enum Color {
+        WHITE, BLACK, NOCOLOR
     }
 
-    public boolean isWhite() {
-        return color.equals(WHITE_COLOR);
+    public enum Type {
+        PAWN('P'),
+        KNIGHT('N'),
+        ROOK('R'),
+        BISHOP('B'),
+        QUEEN('Q'),
+        KING('K'),
+        NONE('.');
+
+        private final char representation;
+
+        Type(char representation) {
+            this.representation = representation;
+        }
+
+        public char getBlackRepresentation() {
+            return representation;
+        }
+
+        public char getWhiteRepresentation() {
+            return Character.toLowerCase(representation);
+        }
     }
+
 }
