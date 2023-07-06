@@ -125,19 +125,19 @@ class BoardTest {
         board.setPiece("b8", Piece.createBlackKing());
         black.add(createBlackKing());
 
-        board.setPiece("e1", Piece.createWhiteRook());
-        white.add(createWhiteRook());
+        board.setPiece("f1", Piece.createWhiteKing());
+        white.add(createWhiteKing());
         board.setPiece("f2", Piece.createWhitePawn());
         white.add(createWhitePawn());
         board.setPiece("f3", Piece.createWhitePawn());
         white.add(createWhitePawn());
-        board.setPiece("f1", Piece.createWhiteKing());
-        white.add(createWhiteKing());
+        board.setPiece("e1", Piece.createWhiteRook());
+        white.add(createWhiteRook());
 
         System.out.println(board.showBoard());
 
-        List<Piece> sortedBlack = board.getSortedPieceList(Color.BLACK);
-        List<Piece> sortedWhite = board.getSortedPieceList(Color.WHITE);
+        List<Piece> sortedBlack = board.findPiecesDescWithColor(Color.BLACK);
+        List<Piece> sortedWhite = board.findPiecesAscWithColor(Color.WHITE);
 
         for (int i = 0; i < black.size(); i++) {
             assertThat(black.get(i)).isEqualTo(sortedBlack.get(i));
