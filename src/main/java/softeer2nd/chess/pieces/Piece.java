@@ -5,7 +5,7 @@ import java.util.Objects;
 /**
  * Value Object로 구현
  */
-public class Piece {
+public class Piece implements Comparable<Piece> {
 
     private final Color color;  // 색상
     private final Type type;   // 이름 (기물의 종류)
@@ -101,7 +101,7 @@ public class Piece {
         }
         return type.getBlackRepresentation();
     }
-    
+
     public double getPoint() {
         return type.getPoint();
     }
@@ -118,6 +118,14 @@ public class Piece {
         Piece piece = (Piece) obj;
         return this.getColor().equals(piece.getColor())
                 && this.getType().equals(piece.getType());
+    }
+
+    @Override
+    public int compareTo(Piece o) {
+        double v = o.getPoint() - this.getPoint();
+        if (v < 0) return -1;
+        if (v > 0) return 1;
+        return 0;
     }
 
     public enum Color {
