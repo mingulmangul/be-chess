@@ -1,5 +1,7 @@
 package softeer2nd.chess.pieces;
 
+import java.util.Objects;
+
 /**
  * Value Object로 구현
  */
@@ -93,12 +95,25 @@ public class Piece {
         return color.equals(Color.WHITE);
     }
 
-    @Override
-    public String toString() {
+    public char getRepresentation() {
         if (isWhite()) {
-            return String.valueOf(type.getWhiteRepresentation());
+            return type.getWhiteRepresentation();
         }
-        return String.valueOf(type.getBlackRepresentation());
+        return type.getBlackRepresentation();
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getColor(), getType());
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null || this.getClass() != obj.getClass()) return false;
+        Piece piece = (Piece) obj;
+        return this.getColor().equals(piece.getColor())
+                && this.getType().equals(piece.getType());
     }
 
     public enum Color {
