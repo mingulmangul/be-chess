@@ -3,6 +3,8 @@ package softeer2nd.chess.board;
 import softeer2nd.chess.pieces.Piece;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import static softeer2nd.chess.pieces.Piece.Color;
@@ -124,5 +126,47 @@ public class Board {
         }
 
         return point;
+    }
+
+    /**
+     * 체스판 위 특정 색상의 모든 기물을 찾아 반환한다
+     *
+     * @param color 색상
+     * @return 기물 리스트
+     */
+    private List<Piece> findPiecesWithColor(Color color) {
+        List<Piece> pieceList = new ArrayList<>();
+        for (Rank rank : chessBoard) {
+            List<Piece> pieces = rank.getPiecesWithColor(color);
+            if (pieces.isEmpty()) {
+                continue;
+            }
+            pieceList.addAll(pieces);
+        }
+        return pieceList;
+    }
+
+    /**
+     * 체스판 위 특정 색상의 기물들을 점수를 기준으로 내림차순 정렬한다
+     *
+     * @param color 색상
+     * @return 정렬된 기물 리스트
+     */
+    public List<Piece> findPiecesDescWithColor(Color color) {
+        List<Piece> pieceList = findPiecesWithColor(color);
+        Collections.sort(pieceList);
+        return pieceList;
+    }
+
+    /**
+     * 체스판 위 특정 색상의 기물들을 점수를 기준으로 오름차순 정렬한다
+     *
+     * @param color 색상
+     * @return 정렬된 기물 리스트
+     */
+    public List<Piece> findPiecesAscWithColor(Color color) {
+        List<Piece> pieceList = findPiecesWithColor(color);
+        pieceList.sort(Comparator.reverseOrder());
+        return pieceList;
     }
 }
