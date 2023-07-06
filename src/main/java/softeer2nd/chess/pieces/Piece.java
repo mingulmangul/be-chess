@@ -101,6 +101,10 @@ public class Piece {
         }
         return type.getBlackRepresentation();
     }
+    
+    public double getPoint() {
+        return type.getPoint();
+    }
 
     @Override
     public int hashCode() {
@@ -121,18 +125,20 @@ public class Piece {
     }
 
     public enum Type {
-        PAWN('P'),
-        KNIGHT('N'),
-        ROOK('R'),
-        BISHOP('B'),
-        QUEEN('Q'),
-        KING('K'),
-        NONE('.');
+        PAWN('P', 1.0d),
+        KNIGHT('N', 2.5d),
+        ROOK('R', 5.0d),
+        BISHOP('B', 3.0d),
+        QUEEN('Q', 9.0d),
+        KING('K', 0.0d),
+        NONE('.', 0.0d);
 
         private final char representation;
+        private final double point;
 
-        Type(char representation) {
+        Type(char representation, double point) {
             this.representation = representation;
+            this.point = point;
         }
 
         public char getBlackRepresentation() {
@@ -141,6 +147,10 @@ public class Piece {
 
         public char getWhiteRepresentation() {
             return Character.toLowerCase(representation);
+        }
+
+        public double getPoint() {
+            return point;
         }
     }
 
