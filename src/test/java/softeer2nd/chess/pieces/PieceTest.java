@@ -3,11 +3,16 @@ package softeer2nd.chess.pieces;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static softeer2nd.chess.pieces.Piece.*;
 
-public class PieceTest {
+class PieceTest {
 
     @Test
     @DisplayName("기물 구현")
@@ -46,8 +51,34 @@ public class PieceTest {
             assertFalse(piece.isWhite());
             assertEquals(Color.BLACK, piece.getColor());
         }
-        assertEquals(String.valueOf(representation), piece.toString());
+        assertEquals(representation, piece.getRepresentation());
     }
 
+    @Test
+    @DisplayName("기물을 점수순으로 정렬한다")
+    void sort() {
+        List<Piece> list = new ArrayList<>();
+        list.add(createBlackRook());
+        list.add(createBlackKnight());
+        list.add(createBlackBishop());
+        list.add(createBlackQueen());
+        list.add(createBlackKing());
+        list.add(createBlackRook());
+        list.add(createBlackPawn());
 
+        List<Piece> sorted = new ArrayList<>();
+        sorted.add(createBlackQueen());
+        sorted.add(createBlackRook());
+        sorted.add(createBlackRook());
+        sorted.add(createBlackBishop());
+        sorted.add(createBlackKnight());
+        sorted.add(createBlackPawn());
+        sorted.add(createBlackKing());
+
+        Collections.sort(list);
+
+        for (int i = 0; i < list.size(); i++) {
+            assertThat(list.get(i)).isEqualTo(sorted.get(i));
+        }
+    }
 }
