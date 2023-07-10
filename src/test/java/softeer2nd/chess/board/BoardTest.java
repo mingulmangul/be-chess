@@ -26,7 +26,7 @@ class BoardTest {
     @Test
     @DisplayName("보드를 초기화한다")
     void create() {
-        assertEquals(32, board.pieceCount());
+        assertEquals(32, board.countPieces());
         String blankRank = appendNewLine("........");
         assertEquals(
                 appendNewLine("RNBQKBNR") +
@@ -145,5 +145,17 @@ class BoardTest {
         for (int i = 0; i < white.size(); i++) {
             assertThat(white.get(i)).isEqualTo(sortedWhite.get(i));
         }
+    }
+
+    @Test
+    @DisplayName("기물을 다른 위치로 이동한다")
+    void move() {
+        board.initialize();
+
+        String sourcePosition = "b2";
+        String targetPosition = "b3";
+        board.move(sourcePosition, targetPosition);
+        assertEquals(Piece.createBlank(Position.from(sourcePosition)), board.findPiece(sourcePosition));
+        assertEquals(Piece.createWhitePawn(Position.from(targetPosition)), board.findPiece(targetPosition));
     }
 }
