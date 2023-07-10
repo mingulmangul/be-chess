@@ -6,8 +6,10 @@ import java.util.Scanner;
 
 public class Chess {
 
+    private Scanner sc;
+
     public void startGame() {
-        Scanner sc = new Scanner(System.in);
+        sc = new Scanner(System.in);
         while (true) {
             String input = sc.nextLine().toLowerCase();
 
@@ -15,10 +17,31 @@ public class Chess {
                 Board board = new Board();
                 board.initialize();
                 System.out.println(board.showBoard());
+                playGame(board);
             } else if (input.equals("end")) {
                 break;
             }
         }
         sc.close();
     }
+
+    private void playGame(Board board) {
+        while (true) {
+            String input = sc.nextLine().toLowerCase();
+
+            if (input.startsWith("move")) {
+                String[] commands = input.split(" ");
+                try {
+                    board.move(commands[1], commands[2]);
+                    System.out.println(board.showBoard());
+                } catch (IllegalArgumentException err) {
+                    System.out.println(err.getMessage());
+                }
+            } else {
+                System.out.println("finish game");
+                break;
+            }
+        }
+    }
+
 }
