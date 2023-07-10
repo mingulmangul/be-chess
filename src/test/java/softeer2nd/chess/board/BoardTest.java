@@ -41,9 +41,9 @@ class BoardTest {
     @Test
     @DisplayName("특정 기물과 색에 해당하는 기물의 개수를 계산한다")
     void countPiecesWithColorAndType() {
-        int countBlackPawn = board.countPiecesWithColorAndType(Color.BLACK, Type.PAWN);
-        int countWhiteKnight = board.countPiecesWithColorAndType(Color.WHITE, Type.KNIGHT);
-        int countWhiteKing = board.countPiecesWithColorAndType(Color.WHITE, Type.KING);
+        int countBlackPawn = board.countPieces(Color.BLACK, Type.PAWN);
+        int countWhiteKnight = board.countPieces(Color.WHITE, Type.KNIGHT);
+        int countWhiteKing = board.countPieces(Color.WHITE, Type.KING);
 
         assertThat(countBlackPawn).isEqualTo(8);
         assertThat(countWhiteKnight).isEqualTo(2);
@@ -82,7 +82,7 @@ class BoardTest {
         Piece newPiece = createBlackRook();
         verify(position, createBlank());
 
-        board.setPiece(position, newPiece);
+        board.addPiece(position, newPiece);
 
         verify(position, newPiece);
         System.out.println(board.showBoard());
@@ -92,14 +92,14 @@ class BoardTest {
     @DisplayName("체스판의 점수를 계산한다")
     void calcScore() {
         board.initializeEmpty();
-        board.setPiece("b6", Piece.createBlackPawn());  // 1
-        board.setPiece("e6", Piece.createBlackQueen()); // 9
-        board.setPiece("b8", Piece.createBlackKing());  // 0
-        board.setPiece("c8", Piece.createBlackRook());  // 5
-        board.setPiece("f2", Piece.createWhitePawn());  // 0.5
-        board.setPiece("f3", Piece.createWhitePawn());  // 0.5
-        board.setPiece("e1", Piece.createWhiteRook());  // 5
-        board.setPiece("f1", Piece.createWhiteKing());  // 0
+        board.addPiece("b6", Piece.createBlackPawn());  // 1
+        board.addPiece("e6", Piece.createBlackQueen()); // 9
+        board.addPiece("b8", Piece.createBlackKing());  // 0
+        board.addPiece("c8", Piece.createBlackRook());  // 5
+        board.addPiece("f2", Piece.createWhitePawn());  // 0.5
+        board.addPiece("f3", Piece.createWhitePawn());  // 0.5
+        board.addPiece("e1", Piece.createWhiteRook());  // 5
+        board.addPiece("f1", Piece.createWhiteKing());  // 0
         System.out.println(board.showBoard());
 
         double blackScore = board.calculatePoint(Color.BLACK);
@@ -116,28 +116,28 @@ class BoardTest {
         List<Piece> black = new ArrayList<>();
         List<Piece> white = new ArrayList<>();
 
-        board.setPiece("e6", Piece.createBlackQueen());
+        board.addPiece("e6", Piece.createBlackQueen());
         black.add(createBlackQueen());
-        board.setPiece("c8", Piece.createBlackRook());
+        board.addPiece("c8", Piece.createBlackRook());
         black.add(createBlackRook());
-        board.setPiece("b6", Piece.createBlackPawn());
+        board.addPiece("b6", Piece.createBlackPawn());
         black.add(createBlackPawn());
-        board.setPiece("b8", Piece.createBlackKing());
+        board.addPiece("b8", Piece.createBlackKing());
         black.add(createBlackKing());
 
-        board.setPiece("f1", Piece.createWhiteKing());
+        board.addPiece("f1", Piece.createWhiteKing());
         white.add(createWhiteKing());
-        board.setPiece("f2", Piece.createWhitePawn());
+        board.addPiece("f2", Piece.createWhitePawn());
         white.add(createWhitePawn());
-        board.setPiece("f3", Piece.createWhitePawn());
+        board.addPiece("f3", Piece.createWhitePawn());
         white.add(createWhitePawn());
-        board.setPiece("e1", Piece.createWhiteRook());
+        board.addPiece("e1", Piece.createWhiteRook());
         white.add(createWhiteRook());
 
         System.out.println(board.showBoard());
 
-        List<Piece> sortedBlack = board.findPiecesDescWithColor(Color.BLACK);
-        List<Piece> sortedWhite = board.findPiecesAscWithColor(Color.WHITE);
+        List<Piece> sortedBlack = board.findAllPiecesInDescOrder(Color.BLACK);
+        List<Piece> sortedWhite = board.findAllPiecesInAscOrder(Color.WHITE);
 
         for (int i = 0; i < black.size(); i++) {
             assertThat(black.get(i)).isEqualTo(sortedBlack.get(i));
@@ -155,7 +155,9 @@ class BoardTest {
         String sourcePosition = "b2";
         String targetPosition = "b3";
         board.move(sourcePosition, targetPosition);
-        assertEquals(Piece.createBlank(Position.from(sourcePosition)), board.findPiece(sourcePosition));
-        assertEquals(Piece.createWhitePawn(Position.from(targetPosition)), board.findPiece(targetPosition));
+        assertThat(Piece.createBlank())
+                .isEqualTo(board.findPiece(sourcePosition));
+        assertThat(Piece.createWhitePawn())
+                .isEqualTo(board.findPiece(targetPosition));
     }
 }

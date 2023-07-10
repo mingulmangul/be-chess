@@ -53,8 +53,8 @@ class RankTest {
         rank.setPiece(4, createWhiteBishop());
         rank.setPiece(7, createWhiteBishop());
 
-        int countPawn = rank.countPiecesWithColorAndType(Color.BLACK, Type.PAWN);
-        int countRook = rank.countPiecesWithColorAndType(Color.WHITE, Type.BISHOP);
+        int countPawn = rank.countPiecesInRank(Color.BLACK, Type.PAWN);
+        int countRook = rank.countPiecesInRank(Color.WHITE, Type.BISHOP);
 
         assertThat(countPawn).isEqualTo(3);
         assertThat(countRook).isEqualTo(2);
@@ -69,8 +69,8 @@ class RankTest {
         rank.setPiece(4, createWhiteBishop());
         rank.setPiece(7, createWhiteBishop());
 
-        List<Piece> blackPieces = rank.getPiecesWithColor(Color.BLACK);
-        List<Piece> whitePieces = rank.getPiecesWithColor(Color.WHITE);
+        List<Piece> blackPieces = rank.getPieceList(Color.BLACK);
+        List<Piece> whitePieces = rank.getPieceList(Color.WHITE);
 
         assertThat(blackPieces).hasSize(3);
         assertThat(whitePieces).hasSize(2);
