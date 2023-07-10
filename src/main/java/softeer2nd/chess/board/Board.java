@@ -14,7 +14,7 @@ public class Board {
 
     public static final int SIZE = 8;
 
-    private final List<Rank> chessBoard = new ArrayList<>();
+    private final List<Rank> ranks = new ArrayList<>();
 
     public Board() {
         initializeEmpty();  // 빈 체스판 생성
@@ -22,37 +22,43 @@ public class Board {
 
     // 체스판을 비어있는 상태로 초기화한다
     public void initializeEmpty() {
-        chessBoard.clear();
+        ranks.clear();
         for (int rankIndex = 0; rankIndex < SIZE; rankIndex++) {
-            chessBoard.add(Rank.createEmptyRank());
+            ranks.add(Rank.createEmptyRank());
         }
     }
 
     // 체스판을 게임 시작 상태로 초기화한다
     public void initialize() {
         initializeEmpty();
-        chessBoard.get(0).initFirstRank(Color.WHITE);
-        chessBoard.get(1).initSecondRank(Color.WHITE);
-        chessBoard.get(SIZE - 1).initFirstRank(Color.BLACK);
-        chessBoard.get(SIZE - 2).initSecondRank(Color.BLACK);
-    }
-
-    // 체스판 위 전체 기물의 개수를 계산한다
-    public int pieceCount() {
-        int count = 0;
-        for (Rank rank : chessBoard) {
-            count += rank.countPieces();
-        }
-        return count;
+        ranks.get(0)
+             .initFirstRank(Color.WHITE);
+        ranks.get(1)
+             .initSecondRank(Color.WHITE);
+        ranks.get(SIZE - 1)
+             .initFirstRank(Color.BLACK);
+        ranks.get(SIZE - 2)
+             .initSecondRank(Color.BLACK);
     }
 
     // 체스판을 출력한다
     public String showBoard() {
         StringBuilder sb = new StringBuilder();
         for (int rankIndex = SIZE - 1; rankIndex >= 0; rankIndex--) {
-            sb.append(chessBoard.get(rankIndex).showRank());
+            sb.append(ranks.get(rankIndex)
+                           .showRank());
         }
         return sb.toString();
+
+    }
+
+    // 체스판 위 전체 기물의 개수를 계산한다
+    public int countPieces() {
+        int count = 0;
+        for (Rank rank : ranks) {
+            count += rank.countPieces();
+        }
+        return count;
     }
 
     /**
@@ -62,10 +68,10 @@ public class Board {
      * @param type  기물의 종류
      * @return 기물의 개수
      */
-    public int countPiecesWithColorAndType(Color color, Type type) {
+    public int countPieces(Color color, Type type) {
         int count = 0;
-        for (Rank rank : chessBoard) {
-            count += rank.countPiecesWithColorAndType(color, type);
+        for (Rank rank : ranks) {
+            count += rank.countPiecesInRank(color, type);
         }
         return count;
     }
@@ -77,8 +83,51 @@ public class Board {
      * @return 찾아 낸 기물
      */
     public Piece findPiece(String position) {
-        Position pos = Position.from(position);
-        return chessBoard.get(pos.getRankIndex()).getPieceAt(pos.getFileIndex());
+        Position pos = Position.of(position);
+        return ranks.get(pos.getRankIndex())
+                    .getPieceAt(pos.getFileIndex());
+    }
+
+    /**
+     * 체스판 위 특정 색상의 모든 기물을 찾아 반환한다
+     *
+     * @param color 색상
+     * @return 기물 리스트
+     */
+    private List<Piece> findAllPieces(Color color) {
+        List<Piece> pieces = new ArrayList<>();
+        for (Rank rank : ranks) {
+            List<Piece> rankPieceList = rank.getPieceList(color);
+            if (rankPieceList.isEmpty()) {
+                continue;
+            }
+            pieces.addAll(rankPieceList);
+        }
+        return pieces;
+    }
+
+    /**
+     * 체스판 위 특정 색상의 기물들을 점수를 기준으로 내림차순 정렬한다
+     *
+     * @param color 색상
+     * @return 정렬된 기물 리스트
+     */
+    public List<Piece> findAllPiecesInDescOrder(Color color) {
+        List<Piece> pieces = findAllPieces(color);
+        Collections.sort(pieces);
+        return pieces;
+    }
+
+    /**
+     * 체스판 위 특정 색상의 기물들을 점수를 기준으로 오름차순 정렬한다
+     *
+     * @param color 색상
+     * @return 정렬된 기물 리스트
+     */
+    public List<Piece> findAllPiecesInAscOrder(Color color) {
+        List<Piece> pieces = findAllPieces(color);
+        pieces.sort(Comparator.reverseOrder());
+        return pieces;
     }
 
     /**
@@ -87,10 +136,22 @@ public class Board {
      * @param position 위치
      * @param piece    추가할 기물
      */
-    public void setPiece(String position, Piece piece) {
-        Position pos = Position.from(position);
-        chessBoard.get(pos.getRankIndex())
-                .setPiece(pos.getFileIndex(), piece);
+    public void addPiece(String position, Piece piece) {
+        Position pos = Position.of(position);
+        ranks.get(pos.getRankIndex())
+             .setPiece(pos.getFileIndex(), piece);
+    }
+
+    /**
+     * 특정 위치의 기물을 제거한다
+     *
+     * @param position 위치
+     * @return 제거한 기물
+     */
+    public Piece removePiece(String position) {
+        Position pos = Position.of(position);
+        return ranks.get(pos.getRankIndex())
+                    .removePiece(pos.getFileIndex());
     }
 
     /**
@@ -106,13 +167,14 @@ public class Board {
             double pawnPoint = 0.0d;
 
             for (int rankIndex = 0; rankIndex < SIZE; rankIndex++) {
-                Piece piece = chessBoard.get(rankIndex).getPieceAt(fileIndex);
+                Piece piece = ranks.get(rankIndex)
+                                   .getPieceAt(fileIndex);
 
-                if (!piece.getColor().equals(color)) {
+                if (piece.getColor() != color) {
                     continue;
                 }
 
-                if (piece.getType().equals(Type.PAWN)) {
+                if (piece.getType() == Type.PAWN) {
                     pawnPoint += piece.getPoint();
                 } else {
                     point += piece.getPoint();
@@ -129,44 +191,16 @@ public class Board {
     }
 
     /**
-     * 체스판 위 특정 색상의 모든 기물을 찾아 반환한다
+     * 기물을 이동시킨다
      *
-     * @param color 색상
-     * @return 기물 리스트
+     * @param sourcePosition 이동할 기물의 위치
+     * @param targetPosition 목적지
      */
-    private List<Piece> findPiecesWithColor(Color color) {
-        List<Piece> pieceList = new ArrayList<>();
-        for (Rank rank : chessBoard) {
-            List<Piece> pieces = rank.getPiecesWithColor(color);
-            if (pieces.isEmpty()) {
-                continue;
-            }
-            pieceList.addAll(pieces);
+    public void move(String sourcePosition, String targetPosition) {
+        if (findPiece(sourcePosition).getType() == Type.NONE) {
+            throw new IllegalArgumentException("비어있는 칸 입니다.");
         }
-        return pieceList;
-    }
-
-    /**
-     * 체스판 위 특정 색상의 기물들을 점수를 기준으로 내림차순 정렬한다
-     *
-     * @param color 색상
-     * @return 정렬된 기물 리스트
-     */
-    public List<Piece> findPiecesDescWithColor(Color color) {
-        List<Piece> pieceList = findPiecesWithColor(color);
-        Collections.sort(pieceList);
-        return pieceList;
-    }
-
-    /**
-     * 체스판 위 특정 색상의 기물들을 점수를 기준으로 오름차순 정렬한다
-     *
-     * @param color 색상
-     * @return 정렬된 기물 리스트
-     */
-    public List<Piece> findPiecesAscWithColor(Color color) {
-        List<Piece> pieceList = findPiecesWithColor(color);
-        pieceList.sort(Comparator.reverseOrder());
-        return pieceList;
+        Piece piece = removePiece(sourcePosition);
+        addPiece(targetPosition, piece);
     }
 }

@@ -86,15 +86,17 @@ public class Rank {
     }
 
     // 특정 위치의 기물을 제거한다
-    public void removePiece(int fileIndex) {
+    public Piece removePiece(int fileIndex) {
+        Piece removedPiece = getPieceAt(fileIndex);
         pieceList.set(fileIndex, createBlank());
+        return removedPiece;
     }
 
     // 기물의 개수를 반환한다
     public int countPieces() {
         int count = 0;
         for (Piece piece : pieceList) {
-            if (!piece.getType().equals(Type.NONE)) {
+            if (piece.getType() != Type.NONE) {
                 count++;
             }
         }
@@ -102,17 +104,17 @@ public class Rank {
     }
 
     // 색상과 종류에 따른 기물의 개수를 계산한다
-    public int countPiecesWithColorAndType(Color color, Type type) {
+    public int countPiecesInRank(Color color, Type type) {
         return (int) pieceList.stream()
-                .filter(piece -> piece.getColor().equals(color) && piece.getType().equals(type))
-                .count();
+                              .filter(piece -> piece.getColor() == color && piece.getType() == type)
+                              .count();
     }
 
     // 색상에 따른 기물 리스트를 반환한다.
-    public List<Piece> getPiecesWithColor(Color color) {
+    public List<Piece> getPieceList(Color color) {
         return pieceList.stream()
-                .filter(piece -> piece.getColor().equals(color))
-                .collect(Collectors.toList());
+                        .filter(piece -> piece.getColor() == color)
+                        .collect(Collectors.toList());
     }
 
     // 랭크를 출력한다
