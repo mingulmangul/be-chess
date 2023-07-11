@@ -17,7 +17,7 @@ class RankTest {
 
     @BeforeEach
     void setUp() {
-        rank = Rank.createEmptyRank();
+        rank = Rank.createRank();
     }
 
     @Test
