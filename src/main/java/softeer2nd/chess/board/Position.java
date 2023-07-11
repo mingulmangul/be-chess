@@ -2,29 +2,39 @@ package softeer2nd.chess.board;
 
 public class Position {
 
-    private final int rankIndex;
-    private final int fileIndex;
+    private final int x;    // File
+    private final int y;    // Rank
 
-    private Position(int rankIndex, int fileIndex) {
-        this.rankIndex = rankIndex;
-        this.fileIndex = fileIndex;
+    private Position(int x, int y) {
+        this.x = x;
+        this.y = y;
     }
 
     // 팩토리 메소드
-    public static Position from(String position) {
-        int fileIndex = position.charAt(0) - 'a';
-        int rankIndex = position.charAt(1) - '1';
-        return new Position(rankIndex, fileIndex);
+    public static Position of(String position) {
+        if (!isValid(position)) {
+            throw new IllegalArgumentException("잘못된 좌표입니다");
+        }
+        int x = position.charAt(0) - 'a';
+        int y = position.charAt(1) - '1';
+        return new Position(x, y);
     }
 
-    // 랭크의 인덱스를 반환한다
-    public int getRankIndex() {
-        return rankIndex;
+    // 좌표가 유효한 범위 내에 있는지 검증한다
+    public static boolean isValid(String position) {
+        char file = position.charAt(0);
+        char rank = position.charAt(1);
+        return 'a' <= file && file <= 'h' && '1' <= rank && rank <= '8';
     }
 
-    // 파일의 인덱스를 반환한다
-    public int getFileIndex() {
-        return fileIndex;
+    // x(file)를 반환한다
+    public int getX() {
+        return x;
+    }
+
+    // y(rank)를 반환한다
+    public int getY() {
+        return y;
     }
 
 }
