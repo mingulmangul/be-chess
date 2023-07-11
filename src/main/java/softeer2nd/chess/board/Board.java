@@ -70,10 +70,9 @@ public class Board {
      * @param position 위치
      * @return 찾아 낸 기물
      */
-    public Piece findPiece(String position) {
-        Position pos = Position.of(position);
-        return ranks.get(pos.getY())
-                    .getPieceAt(pos.getX());
+    public Piece findPiece(Position position) {
+        return ranks.get(position.getY())
+                    .getPieceAt(position.getX());
     }
 
     /**
@@ -124,10 +123,9 @@ public class Board {
      * @param position 위치
      * @param piece    추가할 기물
      */
-    public void addPiece(String position, Piece piece) {
-        Position pos = Position.of(position);
-        ranks.get(pos.getY())
-             .setPiece(pos.getX(), piece);
+    public void addPiece(Position position, Piece piece) {
+        ranks.get(position.getY())
+             .setPiece(position.getX(), piece);
     }
 
     /**
@@ -136,10 +134,9 @@ public class Board {
      * @param position 위치
      * @return 제거한 기물
      */
-    public Piece removePiece(String position) {
-        Position pos = Position.of(position);
-        return ranks.get(pos.getY())
-                    .removePiece(pos.getX());
+    public Piece removePiece(Position position) {
+        return ranks.get(position.getY())
+                    .removePiece(position.getX());
     }
 
 }

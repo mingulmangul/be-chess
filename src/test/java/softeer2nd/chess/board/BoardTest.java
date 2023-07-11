@@ -34,7 +34,7 @@ class BoardTest {
     }
 
     private void verify(String position, Piece expected) {
-        Piece piece = board.findPiece(position);
+        Piece piece = board.findPiece(Position.of(position));
         assertThat(piece).isEqualTo(expected);
     }
 
@@ -65,7 +65,7 @@ class BoardTest {
         Piece newPiece = createBlackRook();
         verify(position, createBlank());
 
-        board.addPiece(position, newPiece);
+        board.addPiece(Position.of(position), newPiece);
 
         verify(position, newPiece);
     }
@@ -77,22 +77,22 @@ class BoardTest {
         List<Piece> black = new ArrayList<>();
         List<Piece> white = new ArrayList<>();
 
-        board.addPiece("e6", Piece.createBlackQueen());
+        board.addPiece(Position.of("e6"), Piece.createBlackQueen());
         black.add(createBlackQueen());
-        board.addPiece("c8", Piece.createBlackRook());
+        board.addPiece(Position.of("c8"), Piece.createBlackRook());
         black.add(createBlackRook());
-        board.addPiece("b6", Piece.createBlackPawn());
+        board.addPiece(Position.of("b6"), Piece.createBlackPawn());
         black.add(createBlackPawn());
-        board.addPiece("b8", Piece.createBlackKing());
+        board.addPiece(Position.of("b8"), Piece.createBlackKing());
         black.add(createBlackKing());
 
-        board.addPiece("f1", Piece.createWhiteKing());
+        board.addPiece(Position.of("f1"), Piece.createWhiteKing());
         white.add(createWhiteKing());
-        board.addPiece("f2", Piece.createWhitePawn());
+        board.addPiece(Position.of("f2"), Piece.createWhitePawn());
         white.add(createWhitePawn());
-        board.addPiece("f3", Piece.createWhitePawn());
+        board.addPiece(Position.of("f3"), Piece.createWhitePawn());
         white.add(createWhitePawn());
-        board.addPiece("e1", Piece.createWhiteRook());
+        board.addPiece(Position.of("e1"), Piece.createWhiteRook());
         white.add(createWhiteRook());
 
         List<Piece> sortedBlack = board.findAllPiecesInDescOrder(Color.BLACK);
