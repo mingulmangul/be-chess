@@ -13,50 +13,38 @@ import static softeer2nd.chess.pieces.Piece.Type;
 public class Board {
 
     public static final int SIZE = 8;
-
     private final List<Rank> ranks = new ArrayList<>();
 
     public Board() {
         initializeEmpty();  // 빈 체스판 생성
     }
 
+    public List<Rank> getRanks() {
+        return ranks;
+    }
+
     // 체스판을 비어있는 상태로 초기화한다
     public void initializeEmpty() {
         ranks.clear();
-        for (int rankIndex = 0; rankIndex < SIZE; rankIndex++) {
-            ranks.add(Rank.createEmptyRank());
+        for (int y = 0; y < SIZE; y++) {
+            ranks.add(Rank.createRank());
         }
     }
 
     // 체스판을 게임 시작 상태로 초기화한다
     public void initialize() {
         initializeEmpty();
-        ranks.get(0)
-             .initFirstRank(Color.WHITE);
-        ranks.get(1)
-             .initSecondRank(Color.WHITE);
-        ranks.get(SIZE - 1)
-             .initFirstRank(Color.BLACK);
-        ranks.get(SIZE - 2)
-             .initSecondRank(Color.BLACK);
-    }
-
-    // 체스판을 출력한다
-    public String showBoard() {
-        StringBuilder sb = new StringBuilder();
-        for (int rankIndex = SIZE - 1; rankIndex >= 0; rankIndex--) {
-            sb.append(ranks.get(rankIndex)
-                           .showRank());
-        }
-        return sb.toString();
-
+        ranks.get(0).initFirstRank(Color.WHITE);
+        ranks.get(1).initSecondRank(Color.WHITE);
+        ranks.get(SIZE - 2).initSecondRank(Color.BLACK);
+        ranks.get(SIZE - 1).initFirstRank(Color.BLACK);
     }
 
     // 체스판 위 전체 기물의 개수를 계산한다
     public int countPieces() {
         int count = 0;
         for (Rank rank : ranks) {
-            count += rank.countPieces();
+            count += rank.countPiecesInRank();
         }
         return count;
     }
@@ -84,8 +72,8 @@ public class Board {
      */
     public Piece findPiece(String position) {
         Position pos = Position.of(position);
-        return ranks.get(pos.getRankIndex())
-                    .getPieceAt(pos.getFileIndex());
+        return ranks.get(pos.getY())
+                    .getPieceAt(pos.getX());
     }
 
     /**
@@ -138,8 +126,8 @@ public class Board {
      */
     public void addPiece(String position, Piece piece) {
         Position pos = Position.of(position);
-        ranks.get(pos.getRankIndex())
-             .setPiece(pos.getFileIndex(), piece);
+        ranks.get(pos.getY())
+             .setPiece(pos.getX(), piece);
     }
 
     /**
@@ -150,57 +138,8 @@ public class Board {
      */
     public Piece removePiece(String position) {
         Position pos = Position.of(position);
-        return ranks.get(pos.getRankIndex())
-                    .removePiece(pos.getFileIndex());
+        return ranks.get(pos.getY())
+                    .removePiece(pos.getX());
     }
 
-    /**
-     * 체스판의 점수를 계산한다
-     *
-     * @param color 점수를 계산할 팀의 색상
-     * @return 점수
-     */
-    public double calculatePoint(Color color) {
-        double point = 0.0d;
-
-        for (int fileIndex = 0; fileIndex < SIZE; fileIndex++) {
-            double pawnPoint = 0.0d;
-
-            for (int rankIndex = 0; rankIndex < SIZE; rankIndex++) {
-                Piece piece = ranks.get(rankIndex)
-                                   .getPieceAt(fileIndex);
-
-                if (piece.getColor() != color) {
-                    continue;
-                }
-
-                if (piece.getType() == Type.PAWN) {
-                    pawnPoint += piece.getPoint();
-                } else {
-                    point += piece.getPoint();
-                }
-            }
-
-            if (pawnPoint > 1) {
-                pawnPoint /= 2;
-            }
-            point += pawnPoint;
-        }
-
-        return point;
-    }
-
-    /**
-     * 기물을 이동시킨다
-     *
-     * @param sourcePosition 이동할 기물의 위치
-     * @param targetPosition 목적지
-     */
-    public void move(String sourcePosition, String targetPosition) {
-        if (findPiece(sourcePosition).getType() == Type.NONE) {
-            throw new IllegalArgumentException("비어있는 칸 입니다.");
-        }
-        Piece piece = removePiece(sourcePosition);
-        addPiece(targetPosition, piece);
-    }
 }
