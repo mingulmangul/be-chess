@@ -113,19 +113,22 @@ public class Piece implements Comparable<Piece> {
 
     @Override
     public boolean equals(Object obj) {
-        if (this == obj) return true;
-        if (obj == null || this.getClass() != obj.getClass()) return false;
-        Piece piece = (Piece) obj;
-        return this.getColor().equals(piece.getColor())
-                && this.getType().equals(piece.getType());
+        if (this == obj)
+            return true;
+        if (obj == null || this.getClass() != obj.getClass())
+            return false;
+        Piece other = (Piece) obj;
+        return this.getColor() == other.getColor() && this.getType() == other.getType();
+    }
+
+    @Override
+    public String toString() {
+        return this.color + "." + this.type;
     }
 
     @Override
     public int compareTo(Piece o) {
-        double v = o.getPoint() - this.getPoint();
-        if (v < 0) return -1;
-        if (v > 0) return 1;
-        return 0;
+        return Double.compare(o.getPoint(), this.getPoint());
     }
 
     public enum Color {
@@ -133,13 +136,13 @@ public class Piece implements Comparable<Piece> {
     }
 
     public enum Type {
-        PAWN('P', 1.0d),
-        KNIGHT('N', 2.5d),
-        ROOK('R', 5.0d),
-        BISHOP('B', 3.0d),
-        QUEEN('Q', 9.0d),
-        KING('K', 0.0d),
-        NONE('.', 0.0d);
+        PAWN('P', 1.0),
+        KNIGHT('N', 2.5),
+        ROOK('R', 5.0),
+        BISHOP('B', 3.0),
+        QUEEN('Q', 9.0),
+        KING('K', 0.0),
+        NONE('.', 0.0);
 
         private final char representation;
         private final double point;
