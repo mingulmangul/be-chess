@@ -84,21 +84,21 @@ public class Rank {
     // 기물의 개수를 반환한다
     public int countPiecesInRank() {
         return (int) pieceList.stream()
-                              .filter(piece -> piece.getType() != Type.NONE)
+                              .filter(piece -> !piece.isType(Type.NONE))
                               .count();
     }
 
     // 색상과 종류에 따른 기물의 개수를 계산한다
     public int countPiecesInRank(Color color, Type type) {
         return (int) pieceList.stream()
-                              .filter(piece -> piece.getColor() == color && piece.getType() == type)
+                              .filter(piece -> piece.isColor(color) && piece.isType(type))
                               .count();
     }
 
     // 색상에 따른 기물 리스트를 반환한다.
     public List<Piece> getPieceList(Color color) {
         return pieceList.stream()
-                        .filter(piece -> piece.getColor() == color)
+                        .filter(piece -> piece.isColor(color))
                         .collect(Collectors.toList());
     }
 

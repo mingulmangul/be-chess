@@ -79,24 +79,8 @@ public class Piece implements Comparable<Piece> {
         return createBlack(Type.KING);
     }
 
-    public Color getColor() {
-        return this.color;
-    }
-
-    public Type getType() {
-        return type;
-    }
-
-    public boolean isBlack() {
-        return color.equals(Color.BLACK);
-    }
-
-    public boolean isWhite() {
-        return color.equals(Color.WHITE);
-    }
-
     public char getRepresentation() {
-        if (isWhite()) {
+        if (isColor(Color.WHITE)) {
             return type.getWhiteRepresentation();
         }
         return type.getBlackRepresentation();
@@ -106,9 +90,17 @@ public class Piece implements Comparable<Piece> {
         return type.getPoint();
     }
 
+    public boolean isColor(Color color) {
+        return this.color.equals(color);
+    }
+
+    public boolean isType(Type type) {
+        return this.type.equals(type);
+    }
+
     @Override
     public int hashCode() {
-        return Objects.hash(getColor(), getType());
+        return Objects.hash(color, type);
     }
 
     @Override
@@ -118,7 +110,7 @@ public class Piece implements Comparable<Piece> {
         if (obj == null || this.getClass() != obj.getClass())
             return false;
         Piece other = (Piece) obj;
-        return this.getColor() == other.getColor() && this.getType() == other.getType();
+        return this.isColor(other.color) && this.isType(other.type);
     }
 
     @Override

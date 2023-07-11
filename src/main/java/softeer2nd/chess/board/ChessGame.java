@@ -1,6 +1,7 @@
 package softeer2nd.chess.board;
 
 import softeer2nd.chess.pieces.Piece;
+import softeer2nd.exceptions.OutOfBoardException;
 
 import static softeer2nd.chess.board.Board.SIZE;
 
@@ -23,34 +24,34 @@ public class ChessGame {
      */
     public double calculatePoint(Piece.Color color) {
         double point = 0.0;
-
         for (int x = 0; x < SIZE; x++) {
-            double pawnPoint = 0.0;
+            point += calculateFilePoint(color, x);
+        }
+        return point;
+    }
 
-            for (int y = 0; y < SIZE; y++) {
-                char file = (char) (x + 'a');
-                String rank = String.valueOf(y + 1);
+    private double calculateFilePoint(Piece.Color color, int x) {
+        double pawnPoint = 0.0;
+        double point = 0.0;
 
-                Piece piece = board.findPiece(file + rank);
+        for (int y = 0; y < SIZE; y++) {
+            Piece piece = board.findPiece(Position.of(x, y));
 
-                if (piece.getColor() != color) {
-                    continue;
-                }
-
-                if (piece.getType() == Piece.Type.PAWN) {
-                    pawnPoint += piece.getPoint();
-                } else {
-                    point += piece.getPoint();
-                }
+            if (!piece.isColor(color)) {
+                continue;
             }
 
-            if (pawnPoint > 1) {
-                pawnPoint /= 2;
+            if (piece.isType(Piece.Type.PAWN)) {
+                pawnPoint += piece.getPoint();
+            } else {
+                point += piece.getPoint();
             }
-            point += pawnPoint;
         }
 
-        return point;
+        if (pawnPoint > 1) {
+            pawnPoint /= 2;
+        }
+        return point + pawnPoint;
     }
 
     /**
