@@ -1,82 +1,22 @@
 package softeer2nd.chess.pieces;
 
+import softeer2nd.exceptions.InvalidDirectionException;
+
+import java.util.List;
 import java.util.Objects;
 
 /**
  * Value Object로 구현
  */
-public class Piece implements Comparable<Piece> {
+public abstract class Piece implements Comparable<Piece> {
 
-    private final Color color;  // 색상
-    private final Type type;   // 이름 (기물의 종류)
+    protected final Color color;  // 색상
+    protected final Type type;   // 이름 (기물의 종류)
 
-    // 팩토리 메소드를 통해서만 생성 -> private 생성자
-    private Piece(Color color, Type type) {
+    // 팩토리 메소드를 통해서만 생성
+    protected Piece(Color color, Type type) {
         this.color = color;
         this.type = type;
-    }
-
-    // 흰색 기물 생성
-    private static Piece createWhite(Type type) {
-        return new Piece(Color.WHITE, type);
-    }
-
-    // 검은색 기물 생성
-    private static Piece createBlack(Type type) {
-        return new Piece(Color.BLACK, type);
-    }
-
-    // 비어있는 기물 생성
-    public static Piece createBlank() {
-        return new Piece(Color.NOCOLOR, Type.NONE);
-    }
-
-    public static Piece createWhitePawn() {
-        return createWhite(Type.PAWN);
-    }
-
-    public static Piece createBlackPawn() {
-        return createBlack(Type.PAWN);
-    }
-
-    public static Piece createWhiteKnight() {
-        return createWhite(Type.KNIGHT);
-    }
-
-    public static Piece createBlackKnight() {
-        return createBlack(Type.KNIGHT);
-    }
-
-    public static Piece createWhiteRook() {
-        return createWhite(Type.ROOK);
-    }
-
-    public static Piece createBlackRook() {
-        return createBlack(Type.ROOK);
-    }
-
-    public static Piece createWhiteBishop() {
-        return createWhite(Type.BISHOP);
-    }
-
-    public static Piece createBlackBishop() {
-        return createBlack(Type.BISHOP);
-    }
-
-    public static Piece createWhiteQueen() {
-        return createWhite(Type.QUEEN);
-    }
-
-    public static Piece createBlackQueen() {
-        return createBlack(Type.QUEEN);
-    }
-
-    public static Piece createWhiteKing() {
-        return createWhite(Type.KING);
-    }
-
-    public static Piece createBlackKing() {
-        return createBlack(Type.KING);
     }
 
     public char getRepresentation() {
@@ -94,8 +34,16 @@ public class Piece implements Comparable<Piece> {
         return this.color.equals(color);
     }
 
+    public boolean equalColor(Piece other) {
+        return this.isColor(other.color);
+    }
+
     public boolean isType(Type type) {
         return this.type.equals(type);
+    }
+
+    public boolean isBlank() {
+        return this.type.equals(Type.NONE);
     }
 
     @Override
@@ -114,13 +62,20 @@ public class Piece implements Comparable<Piece> {
     }
 
     @Override
-    public String toString() {
-        return this.color + "." + this.type;
-    }
-
-    @Override
     public int compareTo(Piece o) {
         return Double.compare(o.getPoint(), this.getPoint());
+    }
+
+    abstract List<Direction> getPieceDirections();
+
+    public Direction calcCurrentDirection(int directionX, int directionY) {
+        List<Direction> directions = getPieceDirections();
+        for (Direction direction : directions) {
+            if (direction.getDirectionX() == directionX && direction.getDirectionY() == directionY) {
+                return direction;
+            }
+        }
+        throw new InvalidDirectionException();
     }
 
     public enum Color {
