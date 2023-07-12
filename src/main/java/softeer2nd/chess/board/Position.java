@@ -42,4 +42,20 @@ public class Position {
         return y;
     }
 
+    @Override
+    public int hashCode() {
+        return super.hashCode();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null || this.getClass() != obj.getClass()) {
+            return false;
+        }
+        Position other = (Position) obj;
+        return this.x == other.x && this.y == other.y;
+    }
 }
