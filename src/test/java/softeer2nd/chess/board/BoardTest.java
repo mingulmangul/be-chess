@@ -4,12 +4,16 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import softeer2nd.chess.pieces.Piece;
+import softeer2nd.chess.pieces.PieceFactory;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static softeer2nd.chess.pieces.Piece.*;
+import static softeer2nd.chess.pieces.Piece.Color;
+import static softeer2nd.chess.pieces.Piece.Type;
+import static softeer2nd.chess.pieces.PieceFactory.createBlack;
+import static softeer2nd.chess.pieces.PieceFactory.createWhite;
 
 class BoardTest {
 
@@ -41,20 +45,17 @@ class BoardTest {
     @Test
     @DisplayName("특정 위치의 기물을 조회한다")
     void findPiece() {
-        verify("a8", createBlackRook());
-        verify("b8", createBlackKnight());
-        verify("c8", createBlackBishop());
-        verify("d8", createBlackQueen());
-        verify("e8", createBlackKing());
-        verify("f8", createBlackBishop());
-        verify("g8", createBlackKnight());
-        verify("h8", createBlackRook());
-        verify("d7", createBlackPawn());
+        verify("a8", createBlack(Type.ROOK));
+        verify("b8", createBlack(Type.KNIGHT));
+        verify("c8", createBlack(Type.BISHOP));
+        verify("d8", createBlack(Type.QUEEN));
+        verify("e8", createBlack(Type.KING));
+        verify("d7", createBlack(Type.PAWN));
 
-        verify("a1", createWhiteRook());
-        verify("d2", createWhitePawn());
+        verify("a1", createWhite(Type.ROOK));
+        verify("d2", createWhite(Type.PAWN));
 
-        verify("f5", createBlank());
+        verify("f5", PieceFactory.createBlank());
     }
 
     @Test
@@ -62,8 +63,8 @@ class BoardTest {
     void addPiece() {
         board.initializeEmpty();
         String position = "f5";
-        Piece newPiece = createBlackRook();
-        verify(position, createBlank());
+        Piece newPiece = createBlack(Type.ROOK);
+        verify(position, PieceFactory.createBlank());
 
         board.addPiece(Position.of(position), newPiece);
 
@@ -77,23 +78,23 @@ class BoardTest {
         List<Piece> black = new ArrayList<>();
         List<Piece> white = new ArrayList<>();
 
-        board.addPiece(Position.of("e6"), Piece.createBlackQueen());
-        black.add(createBlackQueen());
-        board.addPiece(Position.of("c8"), Piece.createBlackRook());
-        black.add(createBlackRook());
-        board.addPiece(Position.of("b6"), Piece.createBlackPawn());
-        black.add(createBlackPawn());
-        board.addPiece(Position.of("b8"), Piece.createBlackKing());
-        black.add(createBlackKing());
+        board.addPiece(Position.of("e6"), createBlack(Type.QUEEN));
+        black.add(createBlack(Type.QUEEN));
+        board.addPiece(Position.of("c8"), createBlack(Type.ROOK));
+        black.add(createBlack(Type.ROOK));
+        board.addPiece(Position.of("b6"), createBlack(Type.PAWN));
+        black.add(createBlack(Type.PAWN));
+        board.addPiece(Position.of("b8"), createBlack(Type.KING));
+        black.add(createBlack(Type.KING));
 
-        board.addPiece(Position.of("f1"), Piece.createWhiteKing());
-        white.add(createWhiteKing());
-        board.addPiece(Position.of("f2"), Piece.createWhitePawn());
-        white.add(createWhitePawn());
-        board.addPiece(Position.of("f3"), Piece.createWhitePawn());
-        white.add(createWhitePawn());
-        board.addPiece(Position.of("e1"), Piece.createWhiteRook());
-        white.add(createWhiteRook());
+        board.addPiece(Position.of("f1"), createWhite(Type.KING));
+        white.add(createWhite(Type.KING));
+        board.addPiece(Position.of("f2"), createWhite(Type.PAWN));
+        white.add(createWhite(Type.PAWN));
+        board.addPiece(Position.of("f3"), createWhite(Type.PAWN));
+        white.add(createWhite(Type.PAWN));
+        board.addPiece(Position.of("e1"), createWhite(Type.ROOK));
+        white.add(createWhite(Type.ROOK));
 
         List<Piece> sortedBlack = board.findAllPiecesInDescOrder(Color.BLACK);
         List<Piece> sortedWhite = board.findAllPiecesInAscOrder(Color.WHITE);

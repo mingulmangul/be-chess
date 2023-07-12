@@ -1,6 +1,7 @@
 package softeer2nd.chess.board;
 
 import softeer2nd.chess.pieces.Piece;
+import softeer2nd.chess.pieces.PieceFactory;
 import softeer2nd.utils.StringUtils;
 
 import java.util.ArrayList;
@@ -8,7 +9,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static softeer2nd.chess.board.Board.SIZE;
-import static softeer2nd.chess.pieces.Piece.*;
+import static softeer2nd.chess.pieces.Piece.Color;
+import static softeer2nd.chess.pieces.Piece.Type;
 
 /**
  * 일급 컬렉션으로 구현
@@ -19,7 +21,7 @@ public class Rank {
 
     private Rank() {
         for (int x = 0; x < SIZE; x++) {
-            pieceList.add(createBlank());
+            pieceList.add(PieceFactory.createBlank());
         }
     }
 
@@ -31,23 +33,23 @@ public class Rank {
     // 게임 초기 진영의 1번째 줄을 초기화한다 (룩 나이트 비숍 퀸 킹 비숍 나이트 룩)
     public void initFirstRank(Color color) {
         if (color == Color.BLACK) {
-            setPiece(0, createBlackRook());
-            setPiece(1, createBlackKnight());
-            setPiece(2, createBlackBishop());
-            setPiece(3, createBlackQueen());
-            setPiece(4, createBlackKing());
-            setPiece(5, createBlackBishop());
-            setPiece(6, createBlackKnight());
-            setPiece(7, createBlackRook());
+            setPiece(0, PieceFactory.createBlack(Type.ROOK));
+            setPiece(1, PieceFactory.createBlack(Type.KNIGHT));
+            setPiece(2, PieceFactory.createBlack(Type.BISHOP));
+            setPiece(3, PieceFactory.createBlack(Type.QUEEN));
+            setPiece(4, PieceFactory.createBlack(Type.KING));
+            setPiece(5, PieceFactory.createBlack(Type.BISHOP));
+            setPiece(6, PieceFactory.createBlack(Type.KNIGHT));
+            setPiece(7, PieceFactory.createBlack(Type.ROOK));
         } else {
-            setPiece(0, createWhiteRook());
-            setPiece(1, createWhiteKnight());
-            setPiece(2, createWhiteBishop());
-            setPiece(3, createWhiteQueen());
-            setPiece(4, createWhiteKing());
-            setPiece(5, createWhiteBishop());
-            setPiece(6, createWhiteKnight());
-            setPiece(7, createWhiteRook());
+            setPiece(0, PieceFactory.createWhite(Type.ROOK));
+            setPiece(1, PieceFactory.createWhite(Type.KNIGHT));
+            setPiece(2, PieceFactory.createWhite(Type.BISHOP));
+            setPiece(3, PieceFactory.createWhite(Type.QUEEN));
+            setPiece(4, PieceFactory.createWhite(Type.KING));
+            setPiece(5, PieceFactory.createWhite(Type.BISHOP));
+            setPiece(6, PieceFactory.createWhite(Type.KNIGHT));
+            setPiece(7, PieceFactory.createWhite(Type.ROOK));
         }
     }
 
@@ -55,11 +57,11 @@ public class Rank {
     public void initSecondRank(Color color) {
         if (color == Color.BLACK) {
             for (int x = 0; x < SIZE; x++) {
-                setPiece(x, createBlackPawn());
+                setPiece(x, PieceFactory.createBlack(Type.PAWN));
             }
         } else {
             for (int x = 0; x < SIZE; x++) {
-                setPiece(x, createWhitePawn());
+                setPiece(x, PieceFactory.createWhite(Type.PAWN));
             }
         }
     }
@@ -77,7 +79,7 @@ public class Rank {
     // 특정 위치의 기물을 제거한다
     public Piece removePiece(int x) {
         Piece removedPiece = getPieceAt(x);
-        pieceList.set(x, createBlank());
+        pieceList.set(x, PieceFactory.createBlank());
         return removedPiece;
     }
 

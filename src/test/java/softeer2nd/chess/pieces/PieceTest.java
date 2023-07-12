@@ -5,7 +5,8 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static softeer2nd.chess.pieces.Piece.*;
+import static softeer2nd.chess.pieces.Piece.Color;
+import static softeer2nd.chess.pieces.Piece.Type;
 
 class PieceTest {
 
@@ -13,28 +14,28 @@ class PieceTest {
     @DisplayName("기물 구현")
     void create_pieces() {
         // 폰
-        verifyPiece(createBlackPawn(), Color.BLACK, Type.PAWN.getBlackRepresentation());
-        verifyPiece(createWhitePawn(), Color.WHITE, Type.PAWN.getWhiteRepresentation());
+        verifyPiece(PieceFactory.createBlack(Type.PAWN), Color.BLACK, Type.PAWN.getBlackRepresentation());
+        verifyPiece(PieceFactory.createWhite(Type.PAWN), Color.WHITE, Type.PAWN.getWhiteRepresentation());
 
         // 룩
-        verifyPiece(createBlackRook(), Color.BLACK, Type.ROOK.getBlackRepresentation());
-        verifyPiece(createWhiteRook(), Color.WHITE, Type.ROOK.getWhiteRepresentation());
+        verifyPiece(PieceFactory.createBlack(Type.ROOK), Color.BLACK, Type.ROOK.getBlackRepresentation());
+        verifyPiece(PieceFactory.createWhite(Type.ROOK), Color.WHITE, Type.ROOK.getWhiteRepresentation());
 
         // 나이트
-        verifyPiece(createBlackKnight(), Color.BLACK, Type.KNIGHT.getBlackRepresentation());
-        verifyPiece(createWhiteKnight(), Color.WHITE, Type.KNIGHT.getWhiteRepresentation());
+        verifyPiece(PieceFactory.createBlack(Type.KNIGHT), Color.BLACK, Type.KNIGHT.getBlackRepresentation());
+        verifyPiece(PieceFactory.createWhite(Type.KNIGHT), Color.WHITE, Type.KNIGHT.getWhiteRepresentation());
 
         // 비숍
-        verifyPiece(createBlackBishop(), Color.BLACK, Type.BISHOP.getBlackRepresentation());
-        verifyPiece(createWhiteBishop(), Color.WHITE, Type.BISHOP.getWhiteRepresentation());
+        verifyPiece(PieceFactory.createBlack(Type.BISHOP), Color.BLACK, Type.BISHOP.getBlackRepresentation());
+        verifyPiece(PieceFactory.createWhite(Type.BISHOP), Color.WHITE, Type.BISHOP.getWhiteRepresentation());
 
         // 퀸
-        verifyPiece(createBlackQueen(), Color.BLACK, Type.QUEEN.getBlackRepresentation());
-        verifyPiece(createWhiteQueen(), Color.WHITE, Type.QUEEN.getWhiteRepresentation());
+        verifyPiece(PieceFactory.createBlack(Type.QUEEN), Color.BLACK, Type.QUEEN.getBlackRepresentation());
+        verifyPiece(PieceFactory.createWhite(Type.QUEEN), Color.WHITE, Type.QUEEN.getWhiteRepresentation());
 
         // 킹
-        verifyPiece(createBlackKing(), Color.BLACK, Type.KING.getBlackRepresentation());
-        verifyPiece(createWhiteKing(), Color.WHITE, Type.KING.getWhiteRepresentation());
+        verifyPiece(PieceFactory.createBlack(Type.KING), Color.BLACK, Type.KING.getBlackRepresentation());
+        verifyPiece(PieceFactory.createWhite(Type.KING), Color.WHITE, Type.KING.getWhiteRepresentation());
     }
 
     private void verifyPiece(Piece piece, Color color, char representation) {
