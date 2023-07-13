@@ -54,14 +54,6 @@ public enum Direction {
         return Arrays.asList(SOUTH, SOUTHWEST, SOUTHEAST);
     }
 
-    // △x를 단위 벡터 크기로 변환한다
-    public static int convertToUnitDirection(int deltaX) {
-        if (deltaX == 0) {
-            return deltaX;
-        }
-        return deltaX / Math.abs(deltaX);
-    }
-
     public int getDirectionX() {
         return directionX;
     }
