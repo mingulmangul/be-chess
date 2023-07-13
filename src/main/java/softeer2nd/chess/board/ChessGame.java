@@ -5,17 +5,23 @@ import softeer2nd.chess.pieces.Piece;
 import softeer2nd.exceptions.InvalidMovementException;
 import softeer2nd.exceptions.NoneTypePieceException;
 
-import static softeer2nd.chess.board.Board.SIZE;
-
 public class ChessGame {
     private final Board board;
+    private Piece.Color turn;
 
     public ChessGame(Board board) {
         this.board = board;
     }
 
-    public Board getBoard() {
-        return board;
+    // 새로운 체스 게임을 시작하기 위해 체스판과 턴을 초기화한다
+    public void initGame() {
+        board.initialize();
+        turn = Piece.Color.BLACK;
+    }
+
+    // 현재 턴인 팀 색상을 반환한다
+    public Piece.Color getCurrentTurn() {
+        return Piece.Color.BLACK;
     }
 
     /**
@@ -26,7 +32,7 @@ public class ChessGame {
      */
     public double calculatePoint(Piece.Color color) {
         double point = 0.0;
-        for (int x = 0; x < SIZE; x++) {
+        for (int x = 0; x < Board.SIZE; x++) {
             point += calculatePointByFile(color, x);
         }
         return point;
@@ -36,7 +42,7 @@ public class ChessGame {
         double pawnPoint = 0.0;
         double point = 0.0;
 
-        for (int y = 0; y < SIZE; y++) {
+        for (int y = 0; y < Board.SIZE; y++) {
             Piece piece = board.findPiece(Position.of(x, y));
 
             if (!piece.isColor(color)) {

@@ -4,6 +4,7 @@ import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import softeer2nd.chess.ChessView;
 
 import static softeer2nd.utils.StringUtils.appendNewLine;
 
@@ -28,6 +29,6 @@ class ChessViewTest {
                 appendNewLine("pppppppp") +
                 appendNewLine("rnbqkbnr");
 
-        Assertions.assertThat(chessView.showBoard()).isEqualTo(initializedBoard);
+        Assertions.assertThat(chessView.printBoard()).isEqualTo(initializedBoard);
     }
 }
