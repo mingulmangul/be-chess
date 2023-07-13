@@ -37,7 +37,6 @@ public class Chess {
                     break;
                 }
                 // 새로운 체스 게임 시작
-                chessGame.initGame();
                 chessView.printGameStartMessage();
                 playGame();
             } catch (InvalidCommandException e) {
@@ -48,8 +47,8 @@ public class Chess {
     }
 
     // 체스 게임 플레이를 시작한다
-    // 게임은 한 팀의 킹이 잡히거나 MAX_TURN(100) 만큼 턴을 반복할 때까지 진행한다
     private void playGame() {
+        // 게임은 한 팀의 킹이 잡히거나 MAX_TURN(100) 만큼 턴을 반복할 때까지 진행한다
         while (chessGame.getRemainingTurns() > 0 && !chessGame.isKingCaught()) {
             chessView.printTurnStartMessage(chessGame.getCurrentTurnColor());
 

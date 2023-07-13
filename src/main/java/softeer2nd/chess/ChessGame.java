@@ -16,7 +16,7 @@ public class ChessGame {
     private static final int MAX_TURN = 100;
     private static final String MOVE_COMMAND = "move";
     private static final String SEPARATOR = " ";
-    private static final int COMMAND_LENGTH = 3;
+    private static final int COMMANDS_LENGTH = 3;
     private static final int ARGUMENT_LENGTH = 2;
     private static final int COMMAND_INDEX = 0;
     private static final int SOURCE_INDEX = 1;
@@ -29,10 +29,11 @@ public class ChessGame {
 
     public ChessGame(Board board) {
         this.board = board;
+        initGame();
     }
 
     // 새로운 체스 게임을 시작하기 위해 체스판과 턴을 초기화한다
-    public void initGame() {
+    private void initGame() {
         board.initialize();
         remainingTurns = MAX_TURN;
         currentTurnColor = Piece.Color.BLACK;
@@ -63,12 +64,7 @@ public class ChessGame {
     // 하나의 턴을 진행한다
     public void startTurn(String command) {
         String[] commands = separateMoveCommand(command);
-        Piece caughtPiece = catchPiece(commands[SOURCE_INDEX], commands[TARGET_INDEX]);
-        // 상대 팀의 KING을 잡은 경우
-        if (caughtPiece.isType(Piece.Type.KING)) {
-            isKingCaught = true;
-            return;
-        }
+        movePiece(commands[SOURCE_INDEX], commands[TARGET_INDEX]);
         // 남은 턴 수 감소 및 턴 변경
         remainingTurns--;
         changeTurnColor();
@@ -84,7 +80,7 @@ public class ChessGame {
 
     // 이동 명령어를 검증한다
     private void verifyMoveCommand(String[] commands) {
-        if (commands.length != COMMAND_LENGTH ||
+        if (commands.length != COMMANDS_LENGTH ||
                 !commands[COMMAND_INDEX].equals(MOVE_COMMAND) ||
                 commands[SOURCE_INDEX].length() != ARGUMENT_LENGTH ||
                 commands[TARGET_INDEX].length() != ARGUMENT_LENGTH) {
@@ -92,15 +88,18 @@ public class ChessGame {
         }
     }
 
-    // 기물을 목적지로 이동시키고 해당 위치에 있던 기물을 반환한다
-    public Piece catchPiece(String sourcePosition, String targetPosition) {
+    // 출발지의 기물을 목적지로 이동시킨다
+    public void movePiece(String sourcePosition, String targetPosition) {
         // 검증
         Position sourcePos = Position.of(sourcePosition);
         Position targetPos = Position.of(targetPosition);
         verifyMovement(sourcePos, targetPos);
-        // 이동
+        // 목적지에 있던 기물이 KING인지 확인
+        Piece targetPiece = board.findPiece(targetPos);
+        isKingCaught = targetPiece.isType(Piece.Type.KING);
+        // 기물 이동
         Piece sourcePiece = board.removePiece(sourcePos);
-        return board.replacePiece(targetPos, sourcePiece);
+        board.setPiece(targetPos, sourcePiece);
     }
 
     // 기물이 출발지부터 목적지까지 이동할 수 있는지 검증한다

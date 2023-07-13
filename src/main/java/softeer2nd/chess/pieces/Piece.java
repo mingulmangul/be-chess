@@ -70,8 +70,10 @@ public abstract class Piece implements Comparable<Piece> {
         return Double.compare(o.getPoint(), this.getPoint());
     }
 
+    // 기물의 이동 가능한 방향(Direction) 리스트를 반환한다
     abstract List<Direction> getPieceDirections();
 
+    // 값이 (directionX, directionY)인 Direction 객체를 찾아 반환한다
     public Direction calcCurrentDirection(int directionX, int directionY) {
         List<Direction> directions = getPieceDirections();
         for (Direction direction : directions) {
@@ -79,6 +81,7 @@ public abstract class Piece implements Comparable<Piece> {
                 return direction;
             }
         }
+        // (directionX, directionY)가 기물이 이동 가능한 Direction이 아니면 예외 발생
         throw new InvalidDirectionException();
     }
 

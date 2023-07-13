@@ -16,7 +16,7 @@ public class ChessView {
     private static final String GAME_START_MESSAGE = appendNewLine("~~ 새로운 체스 게임을 시작합니다 ~~")
             + appendNewLine("< 게임 방법 >")
             + appendNewLine("1. 자신의 차례가 되면 명령어를 입력합니다.")
-            + appendNewLine("\t- catchPiece [from] [to] : [from]에서 [to]로 기물 이동")
+            + appendNewLine("\t- move [from] [to] : [from]에서 [to]로 기물 이동")
             + appendNewLine("2. 상대방의 KING을 잡으면 승리합니다.")
             + appendNewLine("3. 100 턴이 지나도 승부가 나지 않으면 남은 기물에 대한 점수로 승부를 판별합니다.")
             + "----------------------";
@@ -32,14 +32,14 @@ public class ChessView {
     }
 
     // 체스판을 출력한다
-    public String printBoard() {
+    public void printBoard() {
         StringBuilder sb = new StringBuilder();
         sb.append(appendNewLine(BOARD_FILE_HEADER));
         for (int i = Board.SIZE; i > 0; i--) {
             sb.append(i).append(" ")
               .append(board.showRankAt(i - 1));
         }
-        return sb.toString();
+        System.out.println(sb);
     }
 
     // 프로그램 시작 안내 메세지를 출력한다
@@ -54,7 +54,7 @@ public class ChessView {
 
     // 각 턴의 시작 메세지를 출력한다
     public void printTurnStartMessage(Piece.Color color) {
-        System.out.print(printBoard());
+        printBoard();
         System.out.print(color + TURN_START_MESSAGE);
     }
 

@@ -26,10 +26,6 @@ public class Board {
         initializeEmpty();  // 빈 체스판 생성
     }
 
-    public List<Rank> getRanks() {
-        return ranks;
-    }
-
     // 체스판을 비어있는 상태로 초기화한다
     public void initializeEmpty() {
         ranks.clear();
@@ -102,12 +98,9 @@ public class Board {
         return pieces;
     }
 
-    // 특정 위치의 기물을 다른 기물로 바꾼다
-    public Piece replacePiece(Position position, Piece piece) {
-        Rank rank = ranks.get(position.getY());
-        Piece replacedPiece = rank.getPiece(position.getX());
-        rank.setPiece(position.getX(), piece);
-        return replacedPiece;
+    // 특정 위치에 기물을 추가한다
+    public void setPiece(Position position, Piece piece) {
+        ranks.get(position.getY()).setPiece(position.getX(), piece);
     }
 
     // 특정 위치의 기물을 제거한다 (제거한 기물 반환)
