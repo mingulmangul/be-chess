@@ -46,6 +46,10 @@ public abstract class Piece implements Comparable<Piece> {
         return this.type.equals(Type.NONE);
     }
 
+    public boolean isSlidingPiece() {
+        return this.type.slidingPiece;
+    }
+
     @Override
     public int hashCode() {
         return Objects.hash(color, type);
@@ -83,20 +87,22 @@ public abstract class Piece implements Comparable<Piece> {
     }
 
     public enum Type {
-        PAWN('P', 1.0),
-        KNIGHT('N', 2.5),
-        ROOK('R', 5.0),
-        BISHOP('B', 3.0),
-        QUEEN('Q', 9.0),
-        KING('K', 0.0),
-        NONE('.', 0.0);
+        PAWN('P', 1.0, false),
+        KNIGHT('N', 2.5, false),
+        ROOK('R', 5.0, true),
+        BISHOP('B', 3.0, true),
+        QUEEN('Q', 9.0, true),
+        KING('K', 0.0, false),
+        NONE('.', 0.0, true);
 
         private final char representation;
         private final double point;
+        private final boolean slidingPiece;  // 슬라이딩으로 움직이는지 여부 (슬라이딩: 한번에 여러 칸을 움직임)
 
-        Type(char representation, double point) {
+        Type(char representation, double point, boolean slidingPiece) {
             this.representation = representation;
             this.point = point;
+            this.slidingPiece = slidingPiece;
         }
 
         public char getBlackRepresentation() {

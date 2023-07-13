@@ -1,5 +1,6 @@
 package softeer2nd.chess.board;
 
+import softeer2nd.chess.pieces.Direction;
 import softeer2nd.exceptions.OutOfBoardException;
 
 public class Position {
@@ -30,6 +31,12 @@ public class Position {
         if ((0 > x) || (x >= 8) || (0 > y) || (y >= 8)) {
             throw new OutOfBoardException();
         }
+    }
+
+    public Position calcNextStepByDirection(Direction direction) {
+        return Position.of(
+                x + direction.getDirectionX(),
+                y + direction.getDirectionY());
     }
 
     // x(file)를 반환한다

@@ -4,23 +4,23 @@ import java.util.Arrays;
 import java.util.List;
 
 public enum Direction {
-    NORTH(0, 1),
+    NORTH(1, 0),
     NORTHEAST(1, 1),
-    EAST(1, 0),
-    SOUTHEAST(1, -1),
-    SOUTH(0, -1),
+    EAST(0, 1),
+    SOUTHEAST(-1, 1),
+    SOUTH(-1, 0),
     SOUTHWEST(-1, -1),
-    WEST(-1, 0),
-    NORTHWEST(-1, 1),
+    WEST(0, -1),
+    NORTHWEST(1, -1),
 
-    NNE(1, 2),
-    NNW(-1, 2),
-    SSE(1, -2),
-    SSW(-1, -2),
-    EEN(2, 1),
-    EES(2, -1),
-    WWN(-2, 1),
-    WWS(-2, -1);
+    NNE(2, 1),
+    NNW(2, -1),
+    SSE(-2, 1),
+    SSW(-2, -1),
+    EEN(1, 2),
+    EES(-1, 2),
+    WWN(1, -2),
+    WWS(-1, -2);
 
     private final int directionX;
     private final int directionY;
@@ -52,6 +52,14 @@ public enum Direction {
 
     public static List<Direction> blackPawnDirection() {
         return Arrays.asList(SOUTH, SOUTHWEST, SOUTHEAST);
+    }
+
+    // △x를 단위 벡터 크기로 변환한다
+    public static int convertToUnitDirection(int deltaX) {
+        if (deltaX == 0) {
+            return deltaX;
+        }
+        return deltaX / Math.abs(deltaX);
     }
 
     public int getDirectionX() {
