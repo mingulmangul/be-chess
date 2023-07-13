@@ -26,15 +26,22 @@ class BoardTest {
     }
 
     @Test
-    @DisplayName("특정 기물과 색에 해당하는 기물의 개수를 계산한다")
+    @DisplayName("기물의 개수를 계산한다")
     void countPiecesWithColorAndType() {
+        int countAllPieces = board.countPieces();
         int countBlackPawn = board.countPieces(Color.BLACK, Type.PAWN);
         int countWhiteKnight = board.countPieces(Color.WHITE, Type.KNIGHT);
         int countWhiteKing = board.countPieces(Color.WHITE, Type.KING);
 
-        assertThat(countBlackPawn).isEqualTo(8);
-        assertThat(countWhiteKnight).isEqualTo(2);
-        assertThat(countWhiteKing).isEqualTo(1);
+        int numberOfAllPieces = 32;
+        int numberOfBlackPawn = 8;
+        int numberOfWhiteKnight = 2;
+        int numberOfWhiteKing = 1;
+
+        assertThat(countAllPieces).isEqualTo(numberOfAllPieces);
+        assertThat(countBlackPawn).isEqualTo(numberOfBlackPawn);
+        assertThat(countWhiteKnight).isEqualTo(numberOfWhiteKnight);
+        assertThat(countWhiteKing).isEqualTo(numberOfWhiteKing);
     }
 
     private void verify(String position, Piece expected) {
