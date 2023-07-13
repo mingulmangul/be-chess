@@ -2,7 +2,9 @@ package softeer2nd.chess.pieces;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import softeer2nd.exceptions.InvalidPieceTypeException;
 
+import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static softeer2nd.chess.pieces.Piece.Color;
@@ -10,9 +12,14 @@ import static softeer2nd.chess.pieces.Piece.Type;
 
 class PieceTest {
 
+    private void verifyPiece(Piece piece, Color color, char representation) {
+        assertTrue(piece.isColor(color));
+        assertEquals(representation, piece.getRepresentation());
+    }
+
     @Test
-    @DisplayName("기물 구현")
-    void create_pieces() {
+    @DisplayName("색상과 타입에 따른 기물을 생성한다")
+    void createPieces() {
         // 폰
         verifyPiece(PieceFactory.createBlack(Type.PAWN), Color.BLACK, Type.PAWN.getBlackRepresentation());
         verifyPiece(PieceFactory.createWhite(Type.PAWN), Color.WHITE, Type.PAWN.getWhiteRepresentation());
@@ -38,9 +45,10 @@ class PieceTest {
         verifyPiece(PieceFactory.createWhite(Type.KING), Color.WHITE, Type.KING.getWhiteRepresentation());
     }
 
-    private void verifyPiece(Piece piece, Color color, char representation) {
-        assertTrue(piece.isColor(color));
-        assertEquals(representation, piece.getRepresentation());
+    @Test
+    @DisplayName("잘못된 타입의 기물을 생성하면 예외가 발생한다")
+    void createNoneTypePiece() {
+        assertThatExceptionOfType(InvalidPieceTypeException.class).isThrownBy(() ->
+                PieceFactory.createBlack(Type.NONE));
     }
-
 }
