@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static softeer2nd.chess.board.Board.SIZE;
 import static softeer2nd.chess.pieces.Piece.Color;
 import static softeer2nd.chess.pieces.Piece.Type;
 
@@ -20,7 +19,7 @@ public class Rank {
     private final List<Piece> pieceList = new ArrayList<>();
 
     private Rank() {
-        for (int x = 0; x < SIZE; x++) {
+        for (int x = 0; x < Board.SIZE; x++) {
             pieceList.add(PieceFactory.createBlank());
         }
     }
@@ -56,11 +55,11 @@ public class Rank {
     // 게임 초기 진영의 2번째 줄을 초기화한다 (폰 8개)
     public void initSecondRank(Color color) {
         if (color == Color.BLACK) {
-            for (int x = 0; x < SIZE; x++) {
+            for (int x = 0; x < Board.SIZE; x++) {
                 setPiece(x, PieceFactory.createBlack(Type.PAWN));
             }
         } else {
-            for (int x = 0; x < SIZE; x++) {
+            for (int x = 0; x < Board.SIZE; x++) {
                 setPiece(x, PieceFactory.createWhite(Type.PAWN));
             }
         }

@@ -2,8 +2,6 @@ package softeer2nd.chess.board;
 
 import java.util.List;
 
-import static softeer2nd.chess.board.Board.SIZE;
-
 public class ChessView {
 
     private final Board board;
@@ -20,7 +18,7 @@ public class ChessView {
     public String showBoard() {
         StringBuilder sb = new StringBuilder();
         List<Rank> ranks = board.getRanks();
-        for (int y = SIZE - 1; y >= 0; y--) {
+        for (int y = Board.SIZE - 1; y >= 0; y--) {
             sb.append(ranks.get(y).showRank());
         }
         return sb.toString();
