@@ -7,6 +7,8 @@ import softeer2nd.exceptions.InvalidCommandException;
 import softeer2nd.exceptions.InvalidMovementException;
 import softeer2nd.exceptions.NoneTypePieceException;
 
+import java.util.List;
+
 public class ChessGame {
     private final Board board;
     private int remainingTurns;   // 남은 턴 수
@@ -66,11 +68,18 @@ public class ChessGame {
     private String[] separateMoveCommand(String command) {
         String[] commands = command.split(Constant.SEPARATOR);
         // 이동 명령어 검증
+        verifyMoveCommand(commands);
+        return commands;
+    }
+
+    // 이동 명령어를 검증한다
+    private void verifyMoveCommand(String[] commands) {
         if (commands.length != Constant.MOVE_COMMAND_LENGTH ||
-                !commands[Constant.MOVE_COMMAND_INDEX].equals(Constant.MOVE_COMMAND)) {
+                !commands[Constant.MOVE_COMMAND_INDEX].equals(Constant.MOVE_COMMAND) ||
+                commands[Constant.SOURCE_INDEX].length() != 2 ||
+                commands[Constant.TARGET_INDEX].length() != 2) {
             throw new InvalidCommandException();
         }
-        return commands;
     }
 
     // 기물을 목적지로 이동시키고 해당 위치에 있던 기물을 반환한다
@@ -179,13 +188,8 @@ public class ChessGame {
         double pawnPoint = 0.0;
         double point = 0.0;
 
-        for (int y = 0; y < Board.SIZE; y++) {
-            Piece piece = board.findPiece(Position.of(x, y));
-
-            if (!piece.isColor(color)) {
-                continue;
-            }
-
+        List<Piece> pieces = board.findPiecesByFile(color, x);
+        for (Piece piece : pieces) {
             if (piece.isType(Piece.Type.PAWN)) {
                 pawnPoint += piece.getPoint();
             } else {
@@ -203,7 +207,7 @@ public class ChessGame {
     private static class Constant {
 
         private static final int MAX_TURN = 100;
-        private static final String MOVE_COMMAND = "catchPiece";
+        private static final String MOVE_COMMAND = "move";
         private static final String SEPARATOR = " ";
         private static final int MOVE_COMMAND_LENGTH = 3;
         private static final int MOVE_COMMAND_INDEX = 0;

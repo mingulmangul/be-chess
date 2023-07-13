@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static softeer2nd.chess.pieces.Piece.Color;
 import static softeer2nd.chess.pieces.Piece.Type;
@@ -66,8 +67,16 @@ public class Board {
                     .getPiece(position.getX());
     }
 
+    // File(x 좌표)을 기준으로 특정 색상의 기물 리스트를 찾아 반환한다
+    public List<Piece> findPiecesByFile(Color color, int x) {
+        return ranks.stream()
+                    .map(rank -> rank.getPiece(x))
+                    .filter(piece -> piece.isColor(color))
+                    .collect(Collectors.toList());
+    }
+
     // 체스판 위 특정 색상의 모든 기물을 찾아 반환한다
-    private List<Piece> findAllPieces(Color color) {
+    public List<Piece> findAllPieces(Color color) {
         List<Piece> pieces = new ArrayList<>();
         for (Rank rank : ranks) {
             List<Piece> rankPieceList = rank.getPieceList(color);
@@ -107,8 +116,9 @@ public class Board {
                     .removePiece(position.getX());
     }
 
-    public String showRankAt(int x) {
-        return ranks.get(x).showRank();
+    // Rank를 출력한다
+    public String showRankAt(int y) {
+        return ranks.get(y).showRank();
     }
 
 }
