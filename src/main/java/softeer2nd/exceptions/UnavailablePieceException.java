@@ -1,10 +1,10 @@
 package softeer2nd.exceptions;
 
-public class InavailablePieceException extends ChessGameException {
+public class UnavailablePieceException extends ChessGameException {
 
     private static final String MESSAGE = "상대 팀 기물은 움직일 수 없습니다.";
 
-    public InavailablePieceException() {
+    public UnavailablePieceException() {
         super(MESSAGE);
     }
 }
