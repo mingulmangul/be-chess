@@ -29,14 +29,14 @@ class ChessGameTest {
     @DisplayName("체스판 위 기물들에 대한 점수를 계산한다")
     void calculatePoint() {
         // given
-        board.addPiece(Position.of("b6"), PieceFactory.createBlack(Type.PAWN));  // 1
-        board.addPiece(Position.of("e6"), PieceFactory.createBlack(Type.QUEEN)); // 9
-        board.addPiece(Position.of("b8"), PieceFactory.createBlack(Type.KING));  // 0
-        board.addPiece(Position.of("c8"), PieceFactory.createBlack(Type.ROOK));  // 5
-        board.addPiece(Position.of("f2"), PieceFactory.createWhite(Type.PAWN));  // 0.5
-        board.addPiece(Position.of("f3"), PieceFactory.createWhite(Type.PAWN));  // 0.5
-        board.addPiece(Position.of("e1"), PieceFactory.createWhite(Type.ROOK));  // 5
-        board.addPiece(Position.of("f1"), PieceFactory.createWhite(Type.KING));  // 0
+        board.replacePiece(Position.of("b6"), PieceFactory.createBlack(Type.PAWN));  // 1
+        board.replacePiece(Position.of("e6"), PieceFactory.createBlack(Type.QUEEN)); // 9
+        board.replacePiece(Position.of("b8"), PieceFactory.createBlack(Type.KING));  // 0
+        board.replacePiece(Position.of("c8"), PieceFactory.createBlack(Type.ROOK));  // 5
+        board.replacePiece(Position.of("f2"), PieceFactory.createWhite(Type.PAWN));  // 0.5
+        board.replacePiece(Position.of("f3"), PieceFactory.createWhite(Type.PAWN));  // 0.5
+        board.replacePiece(Position.of("e1"), PieceFactory.createWhite(Type.ROOK));  // 5
+        board.replacePiece(Position.of("f1"), PieceFactory.createWhite(Type.KING));  // 0
 
         // when
         double blackScore = chessGame.calculatePoint(Piece.Color.BLACK);
@@ -52,7 +52,7 @@ class ChessGameTest {
     class MovePiece {
 
         private void verifySuccessMove(String srcPos, String targetPos, Piece expected) {
-            Throwable throwable = catchThrowable(() -> chessGame.move(srcPos, targetPos));
+            Throwable throwable = catchThrowable(() -> chessGame.catchPiece(srcPos, targetPos));
             assertThat(throwable).isNull();
             assertThat(board.findPiece(Position.of(srcPos))).isEqualTo(PieceFactory.createBlank());
             assertThat(board.findPiece(Position.of(targetPos))).isEqualTo(expected);
@@ -61,9 +61,9 @@ class ChessGameTest {
         @Test
         @DisplayName("올바른 위치로 기물을 이동시킨다")
         void move() {
-            board.addPiece(Position.of("b5"), PieceFactory.createBlack(Type.KING));
-            board.addPiece(Position.of("g4"), PieceFactory.createBlack(Type.QUEEN));
-            board.addPiece(Position.of("a1"), PieceFactory.createBlack(Type.BISHOP));
+            board.replacePiece(Position.of("b5"), PieceFactory.createBlack(Type.KING));
+            board.replacePiece(Position.of("g4"), PieceFactory.createBlack(Type.QUEEN));
+            board.replacePiece(Position.of("a1"), PieceFactory.createBlack(Type.BISHOP));
 
             verifySuccessMove("b5", "b6", PieceFactory.createBlack(Type.KING));
             verifySuccessMove("g4", "c4", PieceFactory.createBlack(Type.QUEEN));
@@ -81,9 +81,9 @@ class ChessGameTest {
                 String invalidPosition = "i9";
 
                 assertThatExceptionOfType(OutOfBoardException.class).isThrownBy(() ->
-                        chessGame.move(validPosition, invalidPosition));
+                        chessGame.catchPiece(validPosition, invalidPosition));
                 assertThatExceptionOfType(OutOfBoardException.class).isThrownBy(() ->
-                        chessGame.move(invalidPosition, validPosition));
+                        chessGame.catchPiece(invalidPosition, validPosition));
             }
 
             @Test
@@ -92,10 +92,10 @@ class ChessGameTest {
                 String sourcePosition = "d4";
                 String targetPosition = "d6";
                 Piece blackKing = PieceFactory.createBlack(Type.KING);
-                board.addPiece(Position.of(sourcePosition), blackKing);
+                board.replacePiece(Position.of(sourcePosition), blackKing);
 
                 assertThatExceptionOfType(InvalidDirectionException.class)
-                        .isThrownBy(() -> chessGame.move(sourcePosition, targetPosition));
+                        .isThrownBy(() -> chessGame.catchPiece(sourcePosition, targetPosition));
             }
 
             @Test
@@ -105,11 +105,11 @@ class ChessGameTest {
                 String targetPosition = "d5";
                 Piece blackKing = PieceFactory.createBlack(Type.KING);
                 Piece blackPawn = PieceFactory.createBlack(Type.PAWN);
-                board.addPiece(Position.of(sourcePosition), blackKing);
-                board.addPiece(Position.of(targetPosition), blackPawn);
+                board.replacePiece(Position.of(sourcePosition), blackKing);
+                board.replacePiece(Position.of(targetPosition), blackPawn);
 
                 assertThatExceptionOfType(InvalidMovementException.class)
-                        .isThrownBy(() -> chessGame.move(sourcePosition, targetPosition));
+                        .isThrownBy(() -> chessGame.catchPiece(sourcePosition, targetPosition));
             }
         }
 

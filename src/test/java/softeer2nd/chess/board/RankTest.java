@@ -30,7 +30,7 @@ class RankTest {
 
         rank.setPiece(fileIdx, blackPawn);
 
-        Piece addedPawn = rank.getPieceAt(fileIdx);
+        Piece addedPawn = rank.getPiece(fileIdx);
         assertThat(addedPawn).isSameAs(blackPawn);
     }
 
@@ -43,7 +43,7 @@ class RankTest {
         rank.removePiece(fileIdx);
 
         Piece blankPiece = PieceFactory.createBlank();
-        assertThat(rank.getPieceAt(fileIdx)).isEqualTo(blankPiece);
+        assertThat(rank.getPiece(fileIdx)).isEqualTo(blankPiece);
     }
 
     @Test

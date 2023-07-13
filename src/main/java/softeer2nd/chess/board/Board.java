@@ -53,7 +53,6 @@ public class Board {
                     .sum();
     }
 
-
     // 특정 색상과 종류를 가진 기물의 개수를 계산한다
     public int countPieces(Color color, Type type) {
         return ranks.stream()
@@ -61,13 +60,11 @@ public class Board {
                     .sum();
     }
 
-
     // 특정 위치의 기물을 조회한다
     public Piece findPiece(Position position) {
         return ranks.get(position.getY())
-                    .getPieceAt(position.getX());
+                    .getPiece(position.getX());
     }
-
 
     // 체스판 위 특정 색상의 모든 기물을 찾아 반환한다
     private List<Piece> findAllPieces(Color color) {

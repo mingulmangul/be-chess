@@ -66,7 +66,7 @@ public class Rank {
     }
 
     // 특정 위치의 기물을 반환한다
-    public Piece getPieceAt(int x) {
+    public Piece getPiece(int x) {
         return pieceList.get(x);
     }
 
@@ -77,7 +77,7 @@ public class Rank {
 
     // 특정 위치의 기물을 제거한다
     public Piece removePiece(int x) {
-        Piece removedPiece = getPieceAt(x);
+        Piece removedPiece = getPiece(x);
         pieceList.set(x, PieceFactory.createBlank());
         return removedPiece;
     }

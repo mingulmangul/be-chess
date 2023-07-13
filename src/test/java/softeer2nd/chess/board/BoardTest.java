@@ -73,7 +73,7 @@ class BoardTest {
         Piece newPiece = createBlack(Type.ROOK);
         verify(position, PieceFactory.createBlank());
 
-        board.addPiece(Position.of(position), newPiece);
+        board.replacePiece(Position.of(position), newPiece);
 
         verify(position, newPiece);
     }
@@ -85,22 +85,22 @@ class BoardTest {
         List<Piece> black = new ArrayList<>();
         List<Piece> white = new ArrayList<>();
 
-        board.addPiece(Position.of("e6"), createBlack(Type.QUEEN));
+        board.replacePiece(Position.of("e6"), createBlack(Type.QUEEN));
         black.add(createBlack(Type.QUEEN));
-        board.addPiece(Position.of("c8"), createBlack(Type.ROOK));
+        board.replacePiece(Position.of("c8"), createBlack(Type.ROOK));
         black.add(createBlack(Type.ROOK));
-        board.addPiece(Position.of("b6"), createBlack(Type.PAWN));
+        board.replacePiece(Position.of("b6"), createBlack(Type.PAWN));
         black.add(createBlack(Type.PAWN));
-        board.addPiece(Position.of("b8"), createBlack(Type.KING));
+        board.replacePiece(Position.of("b8"), createBlack(Type.KING));
         black.add(createBlack(Type.KING));
 
-        board.addPiece(Position.of("f1"), createWhite(Type.KING));
+        board.replacePiece(Position.of("f1"), createWhite(Type.KING));
         white.add(createWhite(Type.KING));
-        board.addPiece(Position.of("f2"), createWhite(Type.PAWN));
+        board.replacePiece(Position.of("f2"), createWhite(Type.PAWN));
         white.add(createWhite(Type.PAWN));
-        board.addPiece(Position.of("f3"), createWhite(Type.PAWN));
+        board.replacePiece(Position.of("f3"), createWhite(Type.PAWN));
         white.add(createWhite(Type.PAWN));
-        board.addPiece(Position.of("e1"), createWhite(Type.ROOK));
+        board.replacePiece(Position.of("e1"), createWhite(Type.ROOK));
         white.add(createWhite(Type.ROOK));
 
         List<Piece> sortedBlack = board.findAllPiecesInDescOrder(Color.BLACK);
