@@ -13,6 +13,12 @@ import static softeer2nd.chess.pieces.Piece.Type;
 public class Board {
 
     public static final int SIZE = 8;
+
+    private static final int FIRST_RANK_OF_WHITE = 0;
+    private static final int SECOND_RANK_OF_WHITE = 1;
+    private static final int FIRST_RANK_OF_BLACK = SIZE - 1;
+    private static final int SECOND_RANK_OF_BLACK = SIZE - 2;
+
     private final List<Rank> ranks = new ArrayList<>();
 
     public Board() {
@@ -26,7 +32,7 @@ public class Board {
     // 체스판을 비어있는 상태로 초기화한다
     public void initializeEmpty() {
         ranks.clear();
-        for (int y = 0; y < SIZE; y++) {
+        for (int y = 0; y < Board.SIZE; y++) {
             ranks.add(Rank.createRank());
         }
     }
@@ -34,34 +40,25 @@ public class Board {
     // 체스판을 게임 시작 상태로 초기화한다
     public void initialize() {
         initializeEmpty();
-        ranks.get(0).initFirstRank(Color.WHITE);
-        ranks.get(1).initSecondRank(Color.WHITE);
-        ranks.get(SIZE - 2).initSecondRank(Color.BLACK);
-        ranks.get(SIZE - 1).initFirstRank(Color.BLACK);
+        ranks.get(FIRST_RANK_OF_WHITE).initFirstRank(Color.WHITE);
+        ranks.get(SECOND_RANK_OF_WHITE).initSecondRank(Color.WHITE);
+        ranks.get(SECOND_RANK_OF_BLACK).initSecondRank(Color.BLACK);
+        ranks.get(FIRST_RANK_OF_BLACK).initFirstRank(Color.BLACK);
     }
 
     // 체스판 위 전체 기물의 개수를 계산한다
     public int countPieces() {
-        int count = 0;
-        for (Rank rank : ranks) {
-            count += rank.countPiecesInRank();
-        }
-        return count;
+        return ranks.stream()
+                    .mapToInt(Rank::countPiecesInRank)
+                    .sum();
     }
 
-    /**
-     * 특정 색상과 종류를 가진 기물의 개수를 계산한다
-     *
-     * @param color 기물의 색상
-     * @param type  기물의 종류
-     * @return 기물의 개수
-     */
+
+    // 특정 색상과 종류를 가진 기물의 개수를 계산한다
     public int countPieces(Color color, Type type) {
-        int count = 0;
-        for (Rank rank : ranks) {
-            count += rank.countPiecesInRank(color, type);
-        }
-        return count;
+        return ranks.stream()
+                    .mapToInt(rank -> rank.countPiecesInRank(color, type))
+                    .sum();
     }
 
     /**
