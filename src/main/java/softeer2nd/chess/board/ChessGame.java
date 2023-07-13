@@ -126,11 +126,11 @@ public class ChessGame {
         Direction direction = piece.calcCurrentDirection(directionX, directionY);
 
         // 목적지에 도착할 때까지 방향 벡터만큼 한 단계씩 이동하며 해당 칸 검증
-        Position currentPosition = sourcePosition.calcNextStepByDirection(direction);
+        Position currentPosition = sourcePosition.createNextPositionByDirection(direction);
         while (!currentPosition.equals(targetPosition)) {
             // 이동하는 경로에 다른 기물이 존재하면 예외 발생
             verifyPieceNotInPosition(currentPosition);
-            currentPosition = currentPosition.calcNextStepByDirection(direction);
+            currentPosition = currentPosition.createNextPositionByDirection(direction);
         }
     }
 

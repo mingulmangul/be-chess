@@ -33,7 +33,7 @@ public class Position {
         }
     }
 
-    public Position calcNextStepByDirection(Direction direction) {
+    public Position createNextPositionByDirection(Direction direction) {
         return Position.of(
                 x + direction.getDirectionX(),
                 y + direction.getDirectionY());
