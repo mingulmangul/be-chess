@@ -10,7 +10,8 @@ import softeer2nd.exceptions.NoneTypePieceException;
 public class ChessGame {
     private final Board board;
     private int remainingTurns;   // 남은 턴 수
-    private Piece.Color turnColor;   // 현재 턴인 팀의 색상
+    private Piece.Color currentTurnColor;   // 현재 턴을 진행 중인 팀의 색상
+    private boolean isKingCaught;
 
     public ChessGame(Board board) {
         this.board = board;
@@ -19,22 +20,46 @@ public class ChessGame {
     // 새로운 체스 게임을 시작하기 위해 체스판과 턴을 초기화한다
     public void initGame() {
         board.initialize();
-        turnColor = Piece.Color.BLACK;
+        remainingTurns = Constant.MAX_TURN;
+        currentTurnColor = Piece.Color.BLACK;
+        isKingCaught = false;
     }
 
     public int getRemainingTurns() {
         return remainingTurns;
     }
 
-    public Piece.Color getTurnColor() {
-        return turnColor;
+    public Piece.Color getCurrentTurnColor() {
+        return currentTurnColor;
+    }
+
+    public boolean isKingCaught() {
+        return isKingCaught;
+    }
+
+    // 현재 턴을 진행 중인 팀을 변경한다
+    private void changeTurnColor() {
+        if (currentTurnColor == Piece.Color.WHITE) {
+            currentTurnColor = Piece.Color.BLACK;
+            return;
+        }
+        currentTurnColor = Piece.Color.WHITE;
     }
 
     // 하나의 턴을 진행한다
     public void startTurn(String command) {
         String[] commands = separateMoveCommand(command);
-        move(commands[Constant.SOURCE_INDEX], commands[Constant.TARGET_INDEX]);
-        remainingTurns++;
+
+        Piece caughtPiece = catchPiece(commands[Constant.SOURCE_INDEX], commands[Constant.TARGET_INDEX]);
+
+        // 상대 팀의 KING을 잡은 경우
+        if (caughtPiece.isType(Piece.Type.KING)) {
+            isKingCaught = true;
+            return;
+        }
+        // 남은 턴 수 감소 및 턴 변경
+        remainingTurns--;
+        changeTurnColor();
     }
 
     // 이동 명령어를 분리해 반환한다
@@ -48,53 +73,15 @@ public class ChessGame {
         return commands;
     }
 
-    // 해당 색상의 팀의 점수를 계산한다
-    public double calculatePoint(Piece.Color color) {
-        double point = 0.0;
-        for (int x = 0; x < Board.SIZE; x++) {
-            point += calculatePointByFile(color, x);
-        }
-        return point;
-    }
-
-    private double calculatePointByFile(Piece.Color color, int x) {
-        double pawnPoint = 0.0;
-        double point = 0.0;
-
-        for (int y = 0; y < Board.SIZE; y++) {
-            Piece piece = board.findPiece(Position.of(x, y));
-
-            if (!piece.isColor(color)) {
-                continue;
-            }
-
-            if (piece.isType(Piece.Type.PAWN)) {
-                pawnPoint += piece.getPoint();
-            } else {
-                point += piece.getPoint();
-            }
-        }
-
-        if (pawnPoint > 1) {
-            pawnPoint /= 2;
-        }
-        return point + pawnPoint;
-    }
-
-    /**
-     * 기물을 이동시킨다
-     *
-     * @param sourcePosition 이동할 기물의 위치
-     * @param targetPosition 목적지
-     */
-    public void move(String sourcePosition, String targetPosition) {
+    // 기물을 목적지로 이동시키고 해당 위치에 있던 기물을 반환한다
+    public Piece catchPiece(String sourcePosition, String targetPosition) {
         // 검증
         Position sourcePos = Position.of(sourcePosition);
         Position targetPos = Position.of(targetPosition);
         verifyMovement(sourcePos, targetPos);
         // 이동
-        Piece piece = board.removePiece(sourcePos);
-        board.addPiece(targetPos, piece);
+        Piece sourcePiece = board.removePiece(sourcePos);
+        return board.replacePiece(targetPos, sourcePiece);
     }
 
     // 기물이 출발지부터 목적지까지 이동할 수 있는지 검증한다
@@ -112,7 +99,7 @@ public class ChessGame {
             throw new NoneTypePieceException();
         }
         // 다른 팀의 기물을 움직이려고 하면 예외 발생
-        if (!piece.isColor(turnColor)) {
+        if (!piece.isColor(currentTurnColor)) {
             throw new InavailablePieceException();
         }
     }
@@ -166,10 +153,57 @@ public class ChessGame {
         }
     }
 
+    // 게임의 승자를 계산한다
+    public Piece.Color calcGameWinner() {
+        if (isKingCaught) {
+            return currentTurnColor;
+        }
+        double whitePoint = calculatePoint(Piece.Color.WHITE);
+        double blackPoint = calculatePoint(Piece.Color.BLACK);
+        if (whitePoint < blackPoint) {
+            return Piece.Color.BLACK;
+        }
+        return Piece.Color.WHITE;
+    }
+
+    // 해당 색상의 팀의 점수를 계산한다
+    public double calculatePoint(Piece.Color color) {
+        double point = 0.0;
+        for (int x = 0; x < Board.SIZE; x++) {
+            point += calculatePointByFile(color, x);
+        }
+        return point;
+    }
+
+    private double calculatePointByFile(Piece.Color color, int x) {
+        double pawnPoint = 0.0;
+        double point = 0.0;
+
+        for (int y = 0; y < Board.SIZE; y++) {
+            Piece piece = board.findPiece(Position.of(x, y));
+
+            if (!piece.isColor(color)) {
+                continue;
+            }
+
+            if (piece.isType(Piece.Type.PAWN)) {
+                pawnPoint += piece.getPoint();
+            } else {
+                point += piece.getPoint();
+            }
+        }
+
+        if (pawnPoint > 1) {
+            pawnPoint /= 2;
+        }
+        return point + pawnPoint;
+    }
+
     // ChessGame 클래스에서 사용하는 상수를 저장하는 정적 내부 클래스
     private static class Constant {
 
-        private static final String MOVE_COMMAND = "move";
+        private static final int MAX_TURN = 100;
+        private static final String MOVE_COMMAND = "catchPiece";
         private static final String SEPARATOR = " ";
         private static final int MOVE_COMMAND_LENGTH = 3;
         private static final int MOVE_COMMAND_INDEX = 0;

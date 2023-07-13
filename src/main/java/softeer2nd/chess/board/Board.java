@@ -82,14 +82,12 @@ public class Board {
         return pieces;
     }
 
-
     // 체스판 위 특정 색상의 기물들을 점수를 기준으로 내림차순 정렬한다
     public List<Piece> findAllPiecesInDescOrder(Color color) {
         List<Piece> pieces = findAllPieces(color);
         Collections.sort(pieces);
         return pieces;
     }
-
 
     // 체스판 위 특정 색상의 기물들을 점수를 기준으로 오름차순 정렬한다
     public List<Piece> findAllPiecesInAscOrder(Color color) {
@@ -98,13 +96,13 @@ public class Board {
         return pieces;
     }
 
-
-    // 특정 위치에 기물을 추가한다
-    public void addPiece(Position position, Piece piece) {
-        ranks.get(position.getY())
-             .setPiece(position.getX(), piece);
+    // 특정 위치의 기물을 다른 기물로 바꾼다
+    public Piece replacePiece(Position position, Piece piece) {
+        Rank rank = ranks.get(position.getY());
+        Piece replacedPiece = rank.getPiece(position.getX());
+        rank.setPiece(position.getX(), piece);
+        return replacedPiece;
     }
-
 
     // 특정 위치의 기물을 제거한다 (제거한 기물 반환)
     public Piece removePiece(Position position) {
