@@ -1,7 +1,6 @@
 package softeer2nd.chess;
 
 import softeer2nd.chess.board.Board;
-import softeer2nd.chess.board.ChessGame;
 import softeer2nd.exceptions.ChessGameException;
 import softeer2nd.exceptions.InvalidCommandException;
 

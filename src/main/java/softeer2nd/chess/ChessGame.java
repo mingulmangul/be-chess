@@ -1,19 +1,31 @@
-package softeer2nd.chess.board;
+package softeer2nd.chess;
 
+import softeer2nd.chess.board.Board;
+import softeer2nd.chess.board.Position;
 import softeer2nd.chess.pieces.Direction;
 import softeer2nd.chess.pieces.Piece;
-import softeer2nd.exceptions.InavailablePieceException;
 import softeer2nd.exceptions.InvalidCommandException;
 import softeer2nd.exceptions.InvalidMovementException;
 import softeer2nd.exceptions.NoneTypePieceException;
+import softeer2nd.exceptions.UnavailablePieceException;
 
 import java.util.List;
 
 public class ChessGame {
+
+    private static final int MAX_TURN = 100;
+    private static final String MOVE_COMMAND = "move";
+    private static final String SEPARATOR = " ";
+    private static final int COMMAND_LENGTH = 3;
+    private static final int ARGUMENT_LENGTH = 2;
+    private static final int COMMAND_INDEX = 0;
+    private static final int SOURCE_INDEX = 1;
+    private static final int TARGET_INDEX = 2;
+
     private final Board board;
     private int remainingTurns;   // 남은 턴 수
     private Piece.Color currentTurnColor;   // 현재 턴을 진행 중인 팀의 색상
-    private boolean isKingCaught;
+    private boolean isKingCaught;   // 킹을 잡았는지 여부
 
     public ChessGame(Board board) {
         this.board = board;
@@ -22,7 +34,7 @@ public class ChessGame {
     // 새로운 체스 게임을 시작하기 위해 체스판과 턴을 초기화한다
     public void initGame() {
         board.initialize();
-        remainingTurns = Constant.MAX_TURN;
+        remainingTurns = MAX_TURN;
         currentTurnColor = Piece.Color.BLACK;
         isKingCaught = false;
     }
@@ -51,9 +63,7 @@ public class ChessGame {
     // 하나의 턴을 진행한다
     public void startTurn(String command) {
         String[] commands = separateMoveCommand(command);
-
-        Piece caughtPiece = catchPiece(commands[Constant.SOURCE_INDEX], commands[Constant.TARGET_INDEX]);
-
+        Piece caughtPiece = catchPiece(commands[SOURCE_INDEX], commands[TARGET_INDEX]);
         // 상대 팀의 KING을 잡은 경우
         if (caughtPiece.isType(Piece.Type.KING)) {
             isKingCaught = true;
@@ -66,7 +76,7 @@ public class ChessGame {
 
     // 이동 명령어를 분리해 반환한다
     private String[] separateMoveCommand(String command) {
-        String[] commands = command.split(Constant.SEPARATOR);
+        String[] commands = command.split(SEPARATOR);
         // 이동 명령어 검증
         verifyMoveCommand(commands);
         return commands;
@@ -74,10 +84,10 @@ public class ChessGame {
 
     // 이동 명령어를 검증한다
     private void verifyMoveCommand(String[] commands) {
-        if (commands.length != Constant.MOVE_COMMAND_LENGTH ||
-                !commands[Constant.MOVE_COMMAND_INDEX].equals(Constant.MOVE_COMMAND) ||
-                commands[Constant.SOURCE_INDEX].length() != 2 ||
-                commands[Constant.TARGET_INDEX].length() != 2) {
+        if (commands.length != COMMAND_LENGTH ||
+                !commands[COMMAND_INDEX].equals(MOVE_COMMAND) ||
+                commands[SOURCE_INDEX].length() != ARGUMENT_LENGTH ||
+                commands[TARGET_INDEX].length() != ARGUMENT_LENGTH) {
             throw new InvalidCommandException();
         }
     }
@@ -109,7 +119,7 @@ public class ChessGame {
         }
         // 다른 팀의 기물을 움직이려고 하면 예외 발생
         if (!piece.isColor(currentTurnColor)) {
-            throw new InavailablePieceException();
+            throw new UnavailablePieceException();
         }
     }
 
@@ -184,6 +194,7 @@ public class ChessGame {
         return point;
     }
 
+    // File(x 좌표)을 기준으로 점수를 계산한다
     private double calculatePointByFile(Piece.Color color, int x) {
         double pawnPoint = 0.0;
         double point = 0.0;
@@ -201,18 +212,5 @@ public class ChessGame {
             pawnPoint /= 2;
         }
         return point + pawnPoint;
-    }
-
-    // ChessGame 클래스에서 사용하는 상수를 저장하는 정적 내부 클래스
-    private static class Constant {
-
-        private static final int MAX_TURN = 100;
-        private static final String MOVE_COMMAND = "move";
-        private static final String SEPARATOR = " ";
-        private static final int MOVE_COMMAND_LENGTH = 3;
-        private static final int MOVE_COMMAND_INDEX = 0;
-        private static final int SOURCE_INDEX = 1;
-        private static final int TARGET_INDEX = 2;
-
     }
 }

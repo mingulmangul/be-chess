@@ -4,6 +4,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import softeer2nd.chess.ChessGame;
 import softeer2nd.chess.pieces.Piece;
 import softeer2nd.chess.pieces.PieceFactory;
 import softeer2nd.exceptions.InvalidDirectionException;
