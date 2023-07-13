@@ -61,23 +61,15 @@ public class Board {
                     .sum();
     }
 
-    /**
-     * 특정 위치의 기물을 조회한다
-     *
-     * @param position 위치
-     * @return 찾아 낸 기물
-     */
+
+    // 특정 위치의 기물을 조회한다
     public Piece findPiece(Position position) {
         return ranks.get(position.getY())
                     .getPieceAt(position.getX());
     }
 
-    /**
-     * 체스판 위 특정 색상의 모든 기물을 찾아 반환한다
-     *
-     * @param color 색상
-     * @return 기물 리스트
-     */
+
+    // 체스판 위 특정 색상의 모든 기물을 찾아 반환한다
     private List<Piece> findAllPieces(Color color) {
         List<Piece> pieces = new ArrayList<>();
         for (Rank rank : ranks) {
@@ -90,50 +82,38 @@ public class Board {
         return pieces;
     }
 
-    /**
-     * 체스판 위 특정 색상의 기물들을 점수를 기준으로 내림차순 정렬한다
-     *
-     * @param color 색상
-     * @return 정렬된 기물 리스트
-     */
+
+    // 체스판 위 특정 색상의 기물들을 점수를 기준으로 내림차순 정렬한다
     public List<Piece> findAllPiecesInDescOrder(Color color) {
         List<Piece> pieces = findAllPieces(color);
         Collections.sort(pieces);
         return pieces;
     }
 
-    /**
-     * 체스판 위 특정 색상의 기물들을 점수를 기준으로 오름차순 정렬한다
-     *
-     * @param color 색상
-     * @return 정렬된 기물 리스트
-     */
+
+    // 체스판 위 특정 색상의 기물들을 점수를 기준으로 오름차순 정렬한다
     public List<Piece> findAllPiecesInAscOrder(Color color) {
         List<Piece> pieces = findAllPieces(color);
         pieces.sort(Comparator.reverseOrder());
         return pieces;
     }
 
-    /**
-     * 특정 위치에 기물을 추가한다
-     *
-     * @param position 위치
-     * @param piece    추가할 기물
-     */
+
+    // 특정 위치에 기물을 추가한다
     public void addPiece(Position position, Piece piece) {
         ranks.get(position.getY())
              .setPiece(position.getX(), piece);
     }
 
-    /**
-     * 특정 위치의 기물을 제거한다
-     *
-     * @param position 위치
-     * @return 제거한 기물
-     */
+
+    // 특정 위치의 기물을 제거한다 (제거한 기물 반환)
     public Piece removePiece(Position position) {
         return ranks.get(position.getY())
                     .removePiece(position.getX());
+    }
+
+    public String showRankAt(int x) {
+        return ranks.get(x).showRank();
     }
 
 }

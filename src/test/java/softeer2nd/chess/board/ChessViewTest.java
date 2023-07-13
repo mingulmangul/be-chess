@@ -29,6 +29,7 @@ class ChessViewTest {
                 appendNewLine("pppppppp") +
                 appendNewLine("rnbqkbnr");
 
+        System.out.println(chessView.printBoard());
         Assertions.assertThat(chessView.printBoard()).isEqualTo(initializedBoard);
     }
 }

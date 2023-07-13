@@ -106,9 +106,7 @@ public class Rank {
     // 랭크를 출력한다
     public String showRank() {
         StringBuilder sb = new StringBuilder();
-        for (Piece piece : pieceList) {
-            sb.append(piece.getRepresentation());
-        }
+        pieceList.forEach(piece -> sb.append(piece.getRepresentation()));
         return StringUtils.appendNewLine(sb.toString());
     }
 }
