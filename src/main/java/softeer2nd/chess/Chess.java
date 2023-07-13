@@ -61,6 +61,7 @@ public class Chess {
                 chessView.printErrorMessage(e.getMessage());
             }
         }
+        chessView.printWinner(chessGame.calcGameWinner());
     }
 
     // 게임 시작과 프로그램 종료 명령어를 검증한다
