@@ -2,12 +2,15 @@ package softeer2nd.chess.board;
 
 import softeer2nd.chess.pieces.Direction;
 import softeer2nd.chess.pieces.Piece;
+import softeer2nd.exceptions.InavailablePieceException;
+import softeer2nd.exceptions.InvalidCommandException;
 import softeer2nd.exceptions.InvalidMovementException;
 import softeer2nd.exceptions.NoneTypePieceException;
 
 public class ChessGame {
     private final Board board;
-    private Piece.Color turn;
+    private int remainingTurns;   // 남은 턴 수
+    private Piece.Color turnColor;   // 현재 턴인 팀의 색상
 
     public ChessGame(Board board) {
         this.board = board;
@@ -16,20 +19,36 @@ public class ChessGame {
     // 새로운 체스 게임을 시작하기 위해 체스판과 턴을 초기화한다
     public void initGame() {
         board.initialize();
-        turn = Piece.Color.BLACK;
+        turnColor = Piece.Color.BLACK;
     }
 
-    // 현재 턴인 팀 색상을 반환한다
-    public Piece.Color getCurrentTurn() {
-        return Piece.Color.BLACK;
+    public int getRemainingTurns() {
+        return remainingTurns;
     }
 
-    /**
-     * 체스판의 점수를 계산한다
-     *
-     * @param color 점수를 계산할 팀의 색상
-     * @return 점수
-     */
+    public Piece.Color getTurnColor() {
+        return turnColor;
+    }
+
+    // 하나의 턴을 진행한다
+    public void startTurn(String command) {
+        String[] commands = separateMoveCommand(command);
+        move(commands[Constant.SOURCE_INDEX], commands[Constant.TARGET_INDEX]);
+        remainingTurns++;
+    }
+
+    // 이동 명령어를 분리해 반환한다
+    private String[] separateMoveCommand(String command) {
+        String[] commands = command.split(Constant.SEPARATOR);
+        // 이동 명령어 검증
+        if (commands.length != Constant.MOVE_COMMAND_LENGTH ||
+                !commands[Constant.MOVE_COMMAND_INDEX].equals(Constant.MOVE_COMMAND)) {
+            throw new InvalidCommandException();
+        }
+        return commands;
+    }
+
+    // 해당 색상의 팀의 점수를 계산한다
     public double calculatePoint(Piece.Color color) {
         double point = 0.0;
         for (int x = 0; x < Board.SIZE; x++) {
@@ -80,16 +99,21 @@ public class ChessGame {
 
     // 기물이 출발지부터 목적지까지 이동할 수 있는지 검증한다
     private void verifyMovement(Position sourcePosition, Position targetPosition) {
-        Piece srcPiece = board.findPiece(sourcePosition);
-        verifyPieceType(srcPiece);
-        verifyTargetPosition(sourcePosition, targetPosition, srcPiece);
-        verifyAvailableRoute(sourcePosition, targetPosition, srcPiece);
+        Piece sourcePiece = board.findPiece(sourcePosition);
+        verifySourcePiece(sourcePiece);
+        verifyTargetPosition(sourcePosition, targetPosition, sourcePiece);
+        verifyAvailableRoute(sourcePosition, targetPosition, sourcePiece);
     }
 
-    // 기물이 존재하는지(None 타입이 아닌지) 검증한다
-    private void verifyPieceType(Piece piece) {
+    // 움직이려는 기물이 올바른지 검증한다
+    private void verifySourcePiece(Piece piece) {
+        // 기물이 존재하지 않으면(None 타입이면) 예외 발생
         if (piece.isType(Piece.Type.NONE)) {
             throw new NoneTypePieceException();
+        }
+        // 다른 팀의 기물을 움직이려고 하면 예외 발생
+        if (!piece.isColor(turnColor)) {
+            throw new InavailablePieceException();
         }
     }
 
@@ -142,4 +166,15 @@ public class ChessGame {
         }
     }
 
+    // ChessGame 클래스에서 사용하는 상수를 저장하는 정적 내부 클래스
+    private static class Constant {
+
+        private static final String MOVE_COMMAND = "move";
+        private static final String SEPARATOR = " ";
+        private static final int MOVE_COMMAND_LENGTH = 3;
+        private static final int MOVE_COMMAND_INDEX = 0;
+        private static final int SOURCE_INDEX = 1;
+        private static final int TARGET_INDEX = 2;
+
+    }
 }
