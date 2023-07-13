@@ -2,6 +2,7 @@ package softeer2nd.chess;
 
 import softeer2nd.chess.board.Board;
 import softeer2nd.chess.board.ChessGame;
+import softeer2nd.exceptions.ChessGameException;
 import softeer2nd.exceptions.InvalidCommandException;
 
 import java.util.Scanner;
@@ -65,7 +66,7 @@ public class Chess {
                 String[] commands = separateMoveCommand(command);
                 chessGame.move(commands[SOURCE_INDEX], commands[TARGET_INDEX]);
                 turn++;
-            } catch (RuntimeException e) {
+            } catch (ChessGameException e) {
                 chessView.printErrorMessage(e.getMessage());
             }
         }
