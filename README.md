@@ -113,3 +113,20 @@
     - 이동 방향 및 크기를 나타내는 Direction enum 추가
     - 예외 처리하기
 
+## step 7 예외 처리
+
+> **키워드**
+> <br>Exception
+
+**구현 기능**
+
+- 기물 이동 중 발생할 수 있는 에러에 대한 예외 처리
+    - `ChessGameException` : 체스 게임 플레이 중 발생하는 예외 (추상 클래스로 나머지 예외들이 이 클래스를 상속)
+    - `InvalidCommandException` : 잘못된 명령어 입력 시 발생하는 예외
+    - `InvalidDirectionException` : 기물이 이동할 수 없는 방향으로 이동하려는 경우 발생하는 예외
+    - `InvalidMovementException` : 이동할 수 없는 위치로 이동하려는 경우 발생하는 예외 (동일한 위치로 이동하려는 경우/같은 편 기물이 있는 곳으로 이동하려는 경우/이동하는 경로를 다른 기물이 막고 경우)
+    - `InvalidPieceTypeException` : 유효하지 않은 타입의 기물을 생성하려 하는 경우 발생하는 예외
+    - `NoneTypePieceException` : 빈 칸을 선택해 이동시키려 하는 경우 발생하는 예외
+    - `OutOfBoardException` : 입력한 위치가 체스판 범위를 벗어나는 경우 발생하는 예외
+    - `UnavailablePieceException` : 움직일 수 없는 기물을 움직이려는 경우 발생하는 예외 (상대 편 기물을 움직이는 경우)
+ 
