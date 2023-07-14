@@ -2,83 +2,53 @@ package softeer2nd.chess.pieces;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import softeer2nd.exceptions.InvalidPieceTypeException;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static softeer2nd.chess.pieces.Piece.*;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static softeer2nd.chess.pieces.Piece.Color;
+import static softeer2nd.chess.pieces.Piece.Type;
 
 class PieceTest {
 
-    @Test
-    @DisplayName("기물 구현")
-    void create_pieces() {
-        // 폰
-        verifyPiece(createBlackPawn(), Type.PAWN.getBlackRepresentation());
-        verifyPiece(createWhitePawn(), Type.PAWN.getWhiteRepresentation());
-
-        // 룩
-        verifyPiece(createBlackRook(), Type.ROOK.getBlackRepresentation());
-        verifyPiece(createWhiteRook(), Type.ROOK.getWhiteRepresentation());
-
-        // 나이트
-        verifyPiece(createBlackKnight(), Type.KNIGHT.getBlackRepresentation());
-        verifyPiece(createWhiteKnight(), Type.KNIGHT.getWhiteRepresentation());
-
-        // 비숍
-        verifyPiece(createBlackBishop(), Type.BISHOP.getBlackRepresentation());
-        verifyPiece(createWhiteBishop(), Type.BISHOP.getWhiteRepresentation());
-
-        // 퀸
-        verifyPiece(createBlackQueen(), Type.QUEEN.getBlackRepresentation());
-        verifyPiece(createWhiteQueen(), Type.QUEEN.getWhiteRepresentation());
-
-        // 킹
-        verifyPiece(createBlackKing(), Type.KING.getBlackRepresentation());
-        verifyPiece(createWhiteKing(), Type.KING.getWhiteRepresentation());
-    }
-
-    private void verifyPiece(Piece piece, char representation) {
-        if (piece.isWhite()) {
-            assertFalse(piece.isBlack());
-            assertEquals(Color.WHITE, piece.getColor());
-        }
-        if (piece.isBlack()) {
-            assertFalse(piece.isWhite());
-            assertEquals(Color.BLACK, piece.getColor());
-        }
+    private void verifyPiece(Piece piece, Color color, char representation) {
+        assertTrue(piece.isColor(color));
         assertEquals(representation, piece.getRepresentation());
     }
 
     @Test
-    @DisplayName("기물을 점수순으로 정렬한다")
-    void sort() {
-        List<Piece> list = new ArrayList<>();
-        list.add(createBlackRook());
-        list.add(createBlackKnight());
-        list.add(createBlackBishop());
-        list.add(createBlackQueen());
-        list.add(createBlackKing());
-        list.add(createBlackRook());
-        list.add(createBlackPawn());
+    @DisplayName("색상과 타입에 따른 기물을 생성한다")
+    void createPieces() {
+        // 폰
+        verifyPiece(PieceFactory.createBlack(Type.PAWN), Color.BLACK, Type.PAWN.getBlackRepresentation());
+        verifyPiece(PieceFactory.createWhite(Type.PAWN), Color.WHITE, Type.PAWN.getWhiteRepresentation());
 
-        List<Piece> sorted = new ArrayList<>();
-        sorted.add(createBlackQueen());
-        sorted.add(createBlackRook());
-        sorted.add(createBlackRook());
-        sorted.add(createBlackBishop());
-        sorted.add(createBlackKnight());
-        sorted.add(createBlackPawn());
-        sorted.add(createBlackKing());
+        // 룩
+        verifyPiece(PieceFactory.createBlack(Type.ROOK), Color.BLACK, Type.ROOK.getBlackRepresentation());
+        verifyPiece(PieceFactory.createWhite(Type.ROOK), Color.WHITE, Type.ROOK.getWhiteRepresentation());
 
-        Collections.sort(list);
+        // 나이트
+        verifyPiece(PieceFactory.createBlack(Type.KNIGHT), Color.BLACK, Type.KNIGHT.getBlackRepresentation());
+        verifyPiece(PieceFactory.createWhite(Type.KNIGHT), Color.WHITE, Type.KNIGHT.getWhiteRepresentation());
 
-        for (int i = 0; i < list.size(); i++) {
-            assertThat(list.get(i)).isEqualTo(sorted.get(i));
-        }
+        // 비숍
+        verifyPiece(PieceFactory.createBlack(Type.BISHOP), Color.BLACK, Type.BISHOP.getBlackRepresentation());
+        verifyPiece(PieceFactory.createWhite(Type.BISHOP), Color.WHITE, Type.BISHOP.getWhiteRepresentation());
+
+        // 퀸
+        verifyPiece(PieceFactory.createBlack(Type.QUEEN), Color.BLACK, Type.QUEEN.getBlackRepresentation());
+        verifyPiece(PieceFactory.createWhite(Type.QUEEN), Color.WHITE, Type.QUEEN.getWhiteRepresentation());
+
+        // 킹
+        verifyPiece(PieceFactory.createBlack(Type.KING), Color.BLACK, Type.KING.getBlackRepresentation());
+        verifyPiece(PieceFactory.createWhite(Type.KING), Color.WHITE, Type.KING.getWhiteRepresentation());
+    }
+
+    @Test
+    @DisplayName("잘못된 타입의 기물을 생성하면 예외가 발생한다")
+    void createNoneTypePiece() {
+        assertThatExceptionOfType(InvalidPieceTypeException.class).isThrownBy(() ->
+                PieceFactory.createBlack(Type.NONE));
     }
 }
